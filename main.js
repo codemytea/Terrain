@@ -19,12 +19,12 @@ controls.addEventListener('change', renderer);
 controls.minDistance = 500;
 controls.maxDistance = 1500;
 
-// var ambientLight = new THREE.AmbientLight( 'white', 0.5 );
-// scene.add( ambientLight );
-//
-// var light = new THREE.DirectionalLight( 'white', 0.5 );
-// light.position.set( 1, 1, 1 );
-// scene.add( light );
+var ambientLight = new THREE.AmbientLight( 'red', 0.5 );
+scene.add( ambientLight );
+
+var light = new THREE.DirectionalLight( 'red', 0.5 );
+light.position.set( 1, 1, 1 );
+scene.add( light );
 
 
 var materials = [
@@ -68,10 +68,24 @@ window.addEventListener( "resize", (event) => {
 });
 
 function animate() {
-    renderer.render(scene,camera);
     requestAnimationFrame(animate)
+    controls.update();
+    renderer.render(scene,camera);
 }
 
-
-//add controls
+//is being in a box the right thing - see with terrains
+//procedural terrain generation with three js
 //add light sources
+//add auto movement through
+//add arrow controls
+//add fog
+//make tree blender model
+//make house blender model
+//make bush blender model
+//auto gen and add in
+
+
+//l2
+//dirt + leveled + smoke + fallen down trees
+
+//menu

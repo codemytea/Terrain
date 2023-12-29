@@ -61,9 +61,9 @@ const skybox = new THREE.Mesh( geometry, materials );
 scene.add( skybox );
 animate()
 
-window.addEventListener( "resize", (event) => {
+window.addEventListener( "resize", _ => {
     camera.aspect = innerWidth/innerHeight;
-    camera.updateProjectionMatrix( );
+    camera.updateProjectionMatrix();
     renderer.setSize( innerWidth, innerHeight );
 });
 

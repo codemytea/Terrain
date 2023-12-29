@@ -1,123 +1,178 @@
 import * as THREE from 'three';
-import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
-import { ImprovedNoise } from 'three/addons/math/ImprovedNoise.js';
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 
-let camera, controls, scene, renderer;
-let mesh, texture;
-
-let width = window.innerWidth, height = window.innerHeight;
-const worldWidth = 256, worldDepth = 256;
-const clock = new THREE.Clock();
-
-
-init();
-animate();
-
-function init() {
-    camera = new THREE.PerspectiveCamera(60, width / height, 1, 10000);
-    camera.position.set(100, 800, - 800);
-    camera.lookAt(- 100, 810, - 800);
-
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87CEEB);
-    scene.fog = new THREE.FogExp2(0xF7E7D9, 0.0025);
-
-    const geometry = new THREE.PlaneGeometry(10000, 10000, worldWidth - 1, worldDepth - 1);
-    geometry.rotateX(- Math.PI / 2);
-
-    const vertices = geometry.attributes.position.array;
-    const data = generateHeight(worldWidth, worldDepth);
-    for (let i = 0; i < vertices.length; i ++) {
-        vertices[i*3 + 1] = data[i] * 10;
+const cloudShader = {
+    vertexShader:
+        `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
     }
+  `,
+    fragmentShader:
+        `
+    uniform sampler2D map;
+    uniform vec3 fogColor;
+    uniform float fogNear;
+    uniform float fogFar;
+    varying vec2 vUv;
 
-    texture = new THREE.CanvasTexture(generateTexture(data, worldWidth, worldDepth));
-    texture.wrapS = THREE.ClampToEdgeWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.colorSpace = THREE.SRGBColorSpace;
+    void main() {
 
-    mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({ map: texture, color:0x964B00 }));
-    scene.add(mesh);
+      float depth = gl_FragCoord.z / gl_FragCoord.w;
+      float fogFactor = smoothstep( fogNear, fogFar, depth );
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(width, height);
-    document.body.appendChild(renderer.domElement);
+      gl_FragColor = texture2D( map, vUv );
+      gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+      gl_FragColor = mix( gl_FragColor, vec4( fogColor , gl_FragColor.w ), fogFactor );
 
-    controls = new FirstPersonControls(camera, renderer.domElement);
-    controls.movementSpeed = 150;
-    controls.lookSpeed = 0.1;
-
-    window.addEventListener('resize', _ => {
-        width = window.innerWidth;
-        height = window.innerHeight;
-
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(width, height);
-        controls.handleResize();
-    });
+    }
+  `
 }
 
-
-function generateHeight(width, height) {
-    const size = width * height
-    const data = new Uint8Array(size);
-    const perlin = new ImprovedNoise()
-    const temp = Math.sin(Math.PI/4) * 10000
-    const z = (temp - Math.floor(temp)) * 100;
-
-    let quality = 1;
-
-    for (let j = 0; j < 4; j ++) {
-        for (let i = 0; i < size; i ++) {
-            const x = i % width, y = ~~(i / width);
-            data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * 1.75);
-        }
-        quality *= 5;
-    }
-
-    return data;
+const container = document.querySelector('.container');
+const sizes = {
+    width:container.offsetWidth,
+    height:container.offsetHeight
 }
 
-function generateTexture(data, width, height) {
-    const vector3 = new THREE.Vector3(0, 0, 0);
+const scene = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000)
+const renderer = new THREE.WebGLRenderer( { antialias: false, gammaOutput: true, alpha: true } );
+const mouse = new THREE.Vector2();
 
-    const sun = new THREE.Vector3(1, 1, 1);
-    sun.normalize();
+let mesh, geometry, material;
+let position
 
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
+var mouseX = 0, mouseY = 0;
+var start_time = Date.now();
 
-    let context = canvas.getContext('2d');
-    context.fillStyle = '#000';
-    context.fillRect(0, 0, width, height);
+var windowHalfX = window.innerWidth / 2;
+var windowHalfY = window.innerHeight / 2;
 
-    let image = context.getImageData(0, 0, canvas.width, canvas.height);
-    let imageData = image.data;
+var tLoader = new THREE.TextureLoader()
 
-    for (let i = 0; i < imageData.length; i ++) {
-        vector3.x = data[i - 2] - data[i + 2];
-        vector3.y = 2;
-        vector3.z = data[i - width * 2] - data[i + width * 2];
-        vector3.normalize();
+tLoader.load('https://mrdoob.com/lab/javascript/webgl/clouds/cloud10.png', (t)=> {
+    t.colorSpace = THREE.SRGBColorSpace
+    init(t)
+})
 
-        const shade = vector3.dot(sun);
 
-        imageData[i*4] = (96 + shade * 128) * (0.5 + data[i] * 0.007);
-        imageData[i*4 + 1] = (32 + shade * 96) * (0.5 + data[i] * 0.007);
-        imageData[i*4 + 2] = (shade * 96) * (0.5 + data[i] * 0.007);
+
+function init(t){
+
+    var canvas = document.createElement( 'canvas' );
+    canvas.width = 32;
+    canvas.height = window.innerHeight;
+
+    var context = canvas.getContext( '2d' );
+
+    var gradient = context.createLinearGradient( 0, 0, 0, canvas.height );
+    gradient.addColorStop(0, "#1e4877");
+    gradient.addColorStop(0.5, "#4584b4");
+
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    container.style.background = 'url(' + canvas.toDataURL('image/png') + ')';
+    container.style.backgroundSize = '32px 100%';
+
+    camera.position.z = 6000;
+
+    geometry = new THREE.BufferGeometry();
+
+    var texture = t
+    texture.magFilter = THREE.LinearMipMapLinearFilter;
+    texture.minFilter = THREE.LinearMipMapLinearFilter;
+
+    var fog = new THREE.Fog( 0x4584b4, - 100, 3000 );
+    scene.fog = fog
+
+    material = new THREE.ShaderMaterial( {
+
+        uniforms: {
+
+            "map": { type: "t", value: texture },
+            "fogColor" : { type: "c", value: fog.color },
+            "fogNear" : { type: "f", value: fog.near },
+            "fogFar" : { type: "f", value: fog.far },
+
+        },
+        vertexShader: cloudShader.vertexShader,
+        fragmentShader: cloudShader.fragmentShader,
+        depthWrite: false,
+        depthTest: false,
+        transparent: true,
+    } );
+
+    const planeGeo = new THREE.PlaneGeometry( 64, 64 )
+    var planeObj = new THREE.Object3D()
+    const geometries = []
+
+    for ( var i = 0; i < 8000; i++ ) {
+
+        planeObj.position.x = Math.random() * 1000 - 500;
+        planeObj.position.y = - Math.random() * Math.random() * 200 - 15;
+        planeObj.position.z = i;
+        planeObj.rotation.z = Math.random() * Math.PI;
+        planeObj.scale.x = planeObj.scale.y = Math.random() * Math.random() * 1.5 + 0.5;
+        planeObj.updateMatrix()
+
+        const clonedPlaneGeo = planeGeo.clone();
+        clonedPlaneGeo.applyMatrix4(planeObj.matrix);
+
+        geometries.push(clonedPlaneGeo)
+
     }
 
-    context.putImageData(image, 0, 0);
+    const planeGeos = BufferGeometryUtils.mergeGeometries(geometries)
+    const planesMesh = new THREE.Mesh(planeGeos, material)
+    planesMesh.renderOrder = 2
 
-    return canvas;
+    const planesMeshA = planesMesh.clone();
+    planesMeshA.position.z = - 8000;
+    planesMeshA.renderOrder = 1
+
+    scene.add( planesMesh );
+    scene.add( planesMeshA );
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    container.appendChild( renderer.domElement );
+
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    window.addEventListener( 'resize', onWindowResize, false );
+
+    animate()
+
 }
 
+function onDocumentMouseMove( event ) {
+
+    mouseX = ( event.clientX - windowHalfX ) * 0.25;
+    mouseY = ( event.clientY - windowHalfY ) * 0.15;
+
+}
+
+function onWindowResize( event ) {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize( window.innerWidth, window.innerHeight );
+
+}
 
 function animate() {
-    requestAnimationFrame(animate);
-    controls.update(clock.getDelta());
-    renderer.render(scene, camera);
+
+    requestAnimationFrame( animate );
+
+    position = ( ( Date.now() - start_time ) * 0.03 ) % 8000;
+
+    camera.position.x += ( mouseX - camera.position.x ) * 0.01;
+    camera.position.y += ( - mouseY - camera.position.y ) * 0.01;
+    camera.position.z = - position + 8000;
+
+    renderer.render( scene, camera );
+
 }

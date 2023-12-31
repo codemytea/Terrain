@@ -2,13 +2,13 @@ import * as THREE from 'three';
 import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
 import {TerrainGenerator} from './terrain.js'
 import {SimplexNoise} from "three/addons";
+import * as dat from "dat.gui";
+import { Sky } from 'three/addons/objects/Sky.js';
+import {GUI} from "dat.gui";
 
 let width = window.innerWidth, height = window.innerHeight;
 const clock = new THREE.Clock();
-let renderer, camera, scene, controls;
-
-let xOffset = 10000;
-let yOffset = 10000;
+let renderer, camera, scene, controls, sky, sun;
 
 
 function getRandomInt(min, max) {
@@ -69,7 +69,16 @@ const fragmentShader = `
         colour = mix(colour, soilColour, tMoss);
         colour = mix(colour, snowColour, tSoil);
         
+        // Fog calculation
+        float fogFactor = smoothstep(5000.0, 10000.0, distance); // Adjust these values as needed
+        vec3 fogColor = vec3(0.87, 0.93, 0.92); // Set your fog color
+    
+        // Mix the color with the fog
+        colour = mix(colour, fogColor, fogFactor);
+    
         gl_FragColor = vec4(colour, 1.0);
+        
+        
     }
 `;
 
@@ -83,6 +92,8 @@ const material = new THREE.ShaderMaterial({
 
 function setup(){
     scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87CEEB);
+    scene.fog = new THREE.Fog(0x00ff00, 10, 10000 );
 
     camera = new THREE.PerspectiveCamera(60, width / height, 1, 10000);
     camera.position.set(0, 0, 10000)
@@ -118,8 +129,64 @@ function setup(){
     controls.movementSpeed = 1500;
     controls.lookSpeed = 0.1;
 
+    initSky();
+
     eventListeners();
     animate();
+}
+
+function initSky() {
+
+    sky = new Sky();
+    sky.scale.setScalar( 450000 );
+    scene.add( sky );
+
+    sun = new THREE.Vector3();
+
+    /// GUI
+
+    const effectController = {
+        turbidity: 10,
+        rayleigh: 3,
+        mieCoefficient: 0.005,
+        mieDirectionalG: 0.7,
+        elevation: 2,
+        azimuth: 180,
+        exposure: renderer.toneMappingExposure
+    };
+
+    function guiChanged() {
+
+        const uniforms = sky.material.uniforms;
+        uniforms[ 'turbidity' ].value = effectController.turbidity;
+        uniforms[ 'rayleigh' ].value = effectController.rayleigh;
+        uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
+        uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
+
+        const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
+        const theta = THREE.MathUtils.degToRad( effectController.azimuth );
+
+        sun.setFromSphericalCoords( 1, phi, theta );
+
+        uniforms[ 'sunPosition' ].value.copy( sun );
+
+        renderer.toneMappingExposure = effectController.exposure;
+        renderer.render( scene, camera );
+
+    }
+
+    const gui = new GUI();
+
+    gui.add( effectController, 'turbidity', 0.0, 20.0, 0.1 ).onChange( guiChanged );
+    gui.add( effectController, 'rayleigh', 0.0, 4, 0.001 ).onChange( guiChanged );
+    gui.add( effectController, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( guiChanged );
+    gui.add( effectController, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( guiChanged );
+    gui.add( effectController, 'elevation', 0, 90, 0.1 ).onChange( guiChanged );
+    gui.add( effectController, 'azimuth', - 180, 180, 0.1 ).onChange( guiChanged );
+    gui.add( effectController, 'exposure', 0, 1, 0.0001 ).onChange( guiChanged );
+
+    guiChanged();
+
 }
 
 function eventListeners(){
@@ -142,3 +209,15 @@ function animate(){
 }
 
 setup();
+
+/**
+ * TODO:
+ *
+ * Add fog
+ * Add textures to silt and water and snow
+ * Add sun
+ * Add clouds
+ *
+ * Make blender model of trees and rocks
+ * add to world
+ * */

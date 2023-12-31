@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
 
 const cloudShader = {
     vertexShader:
@@ -39,11 +40,13 @@ const sizes = {
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 1, 3000)
+camera.position.set(100, 800, - 800);
 const renderer = new THREE.WebGLRenderer( { antialias: false, gammaOutput: true, alpha: true } );
-const mouse = new THREE.Vector2();
+const clock = new THREE.Clock();
 
 let mesh, geometry, material;
 let position
+let controls;
 
 var mouseX = 0, mouseY = 0;
 var start_time = Date.now();
@@ -140,19 +143,16 @@ function init(t){
     renderer.setSize( window.innerWidth, window.innerHeight );
     container.appendChild( renderer.domElement );
 
-    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     window.addEventListener( 'resize', onWindowResize, false );
+
+    controls = new FirstPersonControls(camera, renderer.domElement);
+    controls.movementSpeed = 1500;
+    controls.lookSpeed = 0.1;
 
     animate()
 
 }
 
-function onDocumentMouseMove( event ) {
-
-    mouseX = ( event.clientX - windowHalfX ) * 0.25;
-    mouseY = ( event.clientY - windowHalfY ) * 0.15;
-
-}
 
 function onWindowResize( event ) {
 
@@ -166,12 +166,7 @@ function onWindowResize( event ) {
 function animate() {
 
     requestAnimationFrame( animate );
-
-    position = ( ( Date.now() - start_time ) * 0.03 ) % 8000;
-
-    camera.position.x += ( mouseX - camera.position.x ) * 0.01;
-    camera.position.y += ( - mouseY - camera.position.y ) * 0.01;
-    camera.position.z = - position + 8000;
+    controls.update(clock.getDelta());
 
     renderer.render( scene, camera );
 

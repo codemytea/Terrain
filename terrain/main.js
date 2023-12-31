@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
 import {TerrainGenerator} from './terrain.js'
 import {SimplexNoise} from "three/addons";
-import * as dat from "dat.gui";
 import { Sky } from 'three/addons/objects/Sky.js';
 import {GUI} from "dat.gui";
 
@@ -135,6 +134,7 @@ function setup(){
     animate();
 }
 
+//toDO - add time changing + dif options eg winter sun, summer sun, early morning etc
 function initSky() {
 
     sky = new Sky();
@@ -215,9 +215,13 @@ setup();
  *
  * Add fog
  * Add textures to silt and water and snow
- * Add sun
  * Add clouds
  *
  * Make blender model of trees and rocks
  * add to world
+ *
+ * add physics - cannot go into world or tree etc
+ * add flying camera only x above planet
+ *
+ * read on tiling perlin noise - modulo?
  * */

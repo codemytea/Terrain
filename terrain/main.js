@@ -132,10 +132,10 @@ function setup(){
             fogColor : { value: fog.color },
             fogNear : { value: fog.near },
             fogFar : { value: fog.far },
-            fogNoiseSpeed: {value: 100000.0},
-            fogNoiseFrequency: {value: 0.0036},
-            fogNoiseImpact: {value: 0.9},
-            fogDensity: {value: 0.0009}
+            fogNoiseSpeed: {value: 0.1},
+            fogNoiseFrequency: {value: 0.003},
+            fogNoiseImpact: {value: 0.5},
+            fogDensity: {value: 0.0006}
         },
         vertexShader: vertexShader,
         fragmentShader: fragmentShader,

@@ -4,6 +4,8 @@ import {TerrainGenerator} from './terrain.js'
 import {SimplexNoise} from "three/addons";
 import { Sky } from 'three/addons/objects/Sky.js';
 import {GUI} from "dat.gui";
+import {noise} from './perlin'
+import {Material} from "three";
 
 let width = window.innerWidth, height = window.innerHeight;
 const clock = new THREE.Clock();
@@ -26,11 +28,12 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
+    ${noise}
     uniform vec3 sphereOrigin;
     uniform vec3 fogColor;
     uniform float fogStart;
     uniform float fogEnd;
-    //uniform vec3 cameraPosition; 
+    uniform float time;
     
     varying vec3 vPosition;
 
@@ -53,10 +56,17 @@ const fragmentShader = `
         return vec3(r / 255.0, g / 255.0, b / 255.0);
     }
 
+
     void main() {
         float distance = length(vPosition - sphereOrigin);
         float cameraDistance = length(vPosition - cameraPosition);
-    
+        
+        vec3 windDir = vec3(0.0, 0.0, time);
+        vec3 scrollingPos = vPosition + 100000.0 * windDir;
+        float noise = cnoise(0.0036 * scrollingPos.xyz);
+        float vFogDepth = (1.0 - 0.9 * noise) * cameraDistance;
+        float fogFactor = 1.0 - exp( - 0.0005 * 0.0009 * vFogDepth * vFogDepth );
+      
         vec3 riverColour = hexToVec3(56.0, 77.0, 71.0);
         vec3 siltColour = hexToVec3(107.0, 116.0, 120.0);
         vec3 mossColour = hexToVec3(124.0, 142.0, 81.0);
@@ -75,8 +85,7 @@ const fragmentShader = `
         colour = mix(colour, snowColour, tSoil);
 
         // Apply fog color
-        float fogFactor = smoothstep(fogStart, fogEnd, cameraDistance);
-        vec3 foggedColor = mix(colour, fogColor, cameraDistance/7000.0);
+        vec3 foggedColor = mix(colour, fogColor, fogFactor);
 
         gl_FragColor = vec4(foggedColor, 1.0);
     }
@@ -114,8 +123,8 @@ function setup(){
 
      material = new THREE.ShaderMaterial({
         uniforms: {
-            //cameraPosition : { value: camera.position }, // Pass camera position to the shader
             sphereOrigin: { value: new THREE.Vector3(0, 0, 0) }, // Set the sphere's origin
+            time: {value: 0},
             fogColor : { value: fog.color },
             fogNear : { value: fog.near },
             fogFar : { value: fog.far },
@@ -211,8 +220,8 @@ function eventListeners(){
 
 function animate(){
     requestAnimationFrame(animate);
-    //material.uniforms.cameraPosition.value.copy(camera.position);
     controls.update(clock.getDelta());
+    material.uniforms.time.value += clock.getDelta();
     renderer.render(scene, camera);
 }
 

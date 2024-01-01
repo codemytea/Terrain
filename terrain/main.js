@@ -7,7 +7,7 @@ import {GUI} from "dat.gui";
 
 let width = window.innerWidth, height = window.innerHeight;
 const clock = new THREE.Clock();
-let renderer, camera, scene, controls, sky, sun;
+let renderer, camera, scene, controls, sky, sun, material;
 
 
 function getRandomInt(min, max) {
@@ -27,6 +27,11 @@ const vertexShader = `
 
 const fragmentShader = `
     uniform vec3 sphereOrigin;
+    uniform vec3 fogColor;
+    uniform float fogStart;
+    uniform float fogEnd;
+    //uniform vec3 cameraPosition; 
+    
     varying vec3 vPosition;
 
     const float minRiverDistance = 4800.0;
@@ -50,6 +55,7 @@ const fragmentShader = `
 
     void main() {
         float distance = length(vPosition - sphereOrigin);
+        float cameraDistance = length(vPosition - cameraPosition);
     
         vec3 riverColour = hexToVec3(56.0, 77.0, 71.0);
         vec3 siltColour = hexToVec3(107.0, 116.0, 120.0);
@@ -67,32 +73,22 @@ const fragmentShader = `
         colour = mix(colour, mossColour, tSilt);
         colour = mix(colour, soilColour, tMoss);
         colour = mix(colour, snowColour, tSoil);
-        
-        // Fog calculation
-        float fogFactor = smoothstep(5000.0, 10000.0, distance); // Adjust these values as needed
-        vec3 fogColor = vec3(0.87, 0.93, 0.92); // Set your fog color
-    
-        // Mix the color with the fog
-        colour = mix(colour, fogColor, fogFactor);
-    
-        gl_FragColor = vec4(colour, 1.0);
-        
-        
+
+        // Apply fog color
+        float fogFactor = smoothstep(fogStart, fogEnd, cameraDistance);
+        vec3 foggedColor = mix(colour, fogColor, cameraDistance/7000.0);
+
+        gl_FragColor = vec4(foggedColor, 1.0);
     }
 `;
 
-const material = new THREE.ShaderMaterial({
-    vertexShader,
-    fragmentShader,
-    uniforms: {
-        sphereOrigin: { value: new THREE.Vector3(0, 0, 0) }, // Set the sphere's origin
-    },
-});
+
 
 function setup(){
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87CEEB);
-    scene.fog = new THREE.Fog(0x00ff00, 10, 10000 );
+    let fog = new THREE.Fog(0xffffff, 100, 1000 );
+    scene.fog = fog;
 
     camera = new THREE.PerspectiveCamera(60, width / height, 1, 10000);
     camera.position.set(0, 0, 10000)
@@ -116,6 +112,17 @@ function setup(){
 
     world.verticesNeedUpdate = true;
 
+     material = new THREE.ShaderMaterial({
+        uniforms: {
+            //cameraPosition : { value: camera.position }, // Pass camera position to the shader
+            sphereOrigin: { value: new THREE.Vector3(0, 0, 0) }, // Set the sphere's origin
+            fogColor : { value: fog.color },
+            fogNear : { value: fog.near },
+            fogFar : { value: fog.far },
+        },
+        vertexShader: vertexShader,
+        fragmentShader: fragmentShader,
+    });
 
     const mesh = new THREE.Mesh(world, material);
     scene.add(mesh);
@@ -204,6 +211,7 @@ function eventListeners(){
 
 function animate(){
     requestAnimationFrame(animate);
+    //material.uniforms.cameraPosition.value.copy(camera.position);
     controls.update(clock.getDelta());
     renderer.render(scene, camera);
 }

@@ -3,9 +3,9 @@ import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.j
 import {TerrainGenerator} from './terrain.js'
 import {SimplexNoise} from "three/addons";
 import { Sky } from 'three/addons/objects/Sky.js';
+import { Water } from 'three/addons/objects/Water2.js';
 import {GUI} from "dat.gui";
 import {noise} from './perlin'
-import {Material} from "three";
 
 let width = window.innerWidth, height = window.innerHeight;
 const clock = new THREE.Clock();
@@ -108,11 +108,13 @@ function setup(){
 
 
     const world = new THREE.SphereGeometry(5000, 600, 600);
+    //const water = new THREE.SphereGeometry(4940, 500, 500);
     const vertexPositions = world.getAttribute('position').array;
     const vertexNormals = world.getAttribute('normal').array;
 
     const simplex = new SimplexNoise();
     let temp = getRandomInt(500, 600)
+
 
     for (let i = 0; i < vertexPositions.length; i += 3) {
 
@@ -238,7 +240,7 @@ setup();
 /**
  * TODO:
  *
- * Add fog
+ * Add volumetric fog
  * Add textures to silt and water and snow
  * Add clouds
  *

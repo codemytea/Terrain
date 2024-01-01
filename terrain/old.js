@@ -117,6 +117,25 @@ main();
 
 \`;`
 
+const fogParsFrag = `
+#ifdef USE_FOG
+  ${noise}
+	uniform vec3 fogColor;
+  uniform vec3 fogNearColor;
+	varying float fogDepth;
+	#ifdef FOG_EXP2
+		uniform float fogDensity;
+	#else
+		uniform float fogNear;
+		uniform float fogFar;
+	#endif
+  varying vec3 vFogWorldPosition;
+  uniform float time;
+  uniform float fogNoiseSpeed;
+  uniform float fogNoiseFreq;
+  uniform float fogNoiseImpact;
+#endif
+
 
 var params = {
     fogNearColor: 0xfc4848,

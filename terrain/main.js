@@ -34,6 +34,10 @@ const fragmentShader = `
     uniform float fogStart;
     uniform float fogEnd;
     uniform float time;
+    uniform float fogNoiseSpeed;
+    uniform float fogNoiseFrequency;
+    uniform float fogNoiseImpact;
+    uniform float fogDensity;
     
     varying vec3 vPosition;
 
@@ -62,10 +66,10 @@ const fragmentShader = `
         float cameraDistance = length(vPosition - cameraPosition);
         
         vec3 windDir = vec3(0.0, 0.0, time);
-        vec3 scrollingPos = vPosition + 100000.0 * windDir;
-        float noise = cnoise(0.0036 * scrollingPos.xyz);
-        float vFogDepth = (1.0 - 0.9 * noise) * cameraDistance;
-        float fogFactor = 1.0 - exp( - 0.0005 * 0.0009 * vFogDepth * vFogDepth );
+        vec3 scrollingPos = vPosition + fogNoiseSpeed * windDir;
+        float noise = cnoise(fogNoiseFrequency * scrollingPos.xyz);
+        float vFogDepth = (1.0 - fogNoiseImpact * noise) * cameraDistance;
+        float fogFactor = 1.0 - exp( - fogDensity * fogDensity * vFogDepth * vFogDepth );
       
         vec3 riverColour = hexToVec3(56.0, 77.0, 71.0);
         vec3 siltColour = hexToVec3(107.0, 116.0, 120.0);
@@ -128,6 +132,10 @@ function setup(){
             fogColor : { value: fog.color },
             fogNear : { value: fog.near },
             fogFar : { value: fog.far },
+            fogNoiseSpeed: {value: 100000.0},
+            fogNoiseFrequency: {value: 0.0036},
+            fogNoiseImpact: {value: 0.9},
+            fogDensity: {value: 0.0009}
         },
         vertexShader: vertexShader,
         fragmentShader: fragmentShader,

@@ -14,7 +14,6 @@ export class WorldTerrain{
     constructor() {
         this.r = 5000
         this.world = new THREE.SphereGeometry(this.r, 600, 600);
-        //const water = new THREE.SphereGeometry(4940, 500, 500);
         const vertexPositions = this.world.getAttribute('position').array;
         const vertexNormals = this.world.getAttribute('normal').array;
 
@@ -51,6 +50,8 @@ export class WorldTerrain{
         });
 
         this.mesh = new THREE.Mesh(this.world, this.material);
+        this.mesh.receiveShadow = true
+        this.mesh.castShadow = true
         this.mesh.position.set(0, 0, 0)
     }
 

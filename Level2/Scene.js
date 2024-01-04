@@ -4,9 +4,6 @@ import {Renderer} from "./Renderer";
 
 export class Scene{
 
-
-
-
     constructor(objects) {
 
         this.objects = objects
@@ -15,13 +12,12 @@ export class Scene{
         this.scene.background = new THREE.Color(0x87CEEB);
         this.scene.fog = new THREE.Fog(0xffffff, 0.01, 2500);
 
-        let al = new THREE.AmbientLight(0xffffff, 10)
-        this.scene.add(al)
 
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-        this.camera.position.set(0, 0, 10000)
+        this.camera.position.set(0, 0, 5300)
+        this.camera.rotateZ(Math.PI*2)
         this.controls = new FirstPersonControls(this.camera, Renderer.instance.renderer.domElement);
-        this.controls.movementSpeed = 1500;
+        this.controls.movementSpeed = 150;
         this.controls.lookSpeed = 0.1;
         this.objects.forEach(o => o.add(this.scene))
 

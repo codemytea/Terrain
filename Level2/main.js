@@ -1,6 +1,8 @@
 import {Scene} from "./Scene";
 import {WorldTerrain} from "./WorldTerrain";
 import {Sky} from "./Sky";
+import {WaterSphere} from "./WaterSphere";
+import {Lights} from "./Lights";
 
 
 
@@ -9,7 +11,9 @@ const world = new WorldTerrain()
 new Scene([
     world,
     new Sky(),
-    ...world.getRandomTrees(0.07)
+    ...world.getRandomTrees(0.07),
+    new WaterSphere(),
+    new Lights()
 
 ]).display()
 

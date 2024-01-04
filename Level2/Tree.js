@@ -1,5 +1,4 @@
 import {GLTFLoader} from "three/addons";
-import * as THREE from 'three'
 
 export class Tree{
     obj;
@@ -14,12 +13,14 @@ export class Tree{
 
     async init(r, theta, phi, scale){
         let tree = (await Tree.gltf).clone()
-        tree.position.setFromSphericalCoords(r, phi, theta)
+        tree.position.setFromSphericalCoords(r-10, phi, theta)
         tree.scale.set(scale, scale, scale)
 
         tree.lookAt(0, 0, 0)
         tree.rotateX(Math.PI*1.5)
-        //tree.rotation.set(phi+Math.PI, 0, theta+Math.PI)//may have to switch round phi and theta
+
+        tree.castShadow = true
+        tree.receiveShadow = true
 
         return tree;
     }

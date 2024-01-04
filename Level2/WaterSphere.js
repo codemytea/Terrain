@@ -12,7 +12,7 @@ export class WaterSphere{
 
         this.cubeCamera = new THREE.CubeCamera(0.1, 1000, cubeRenderTarget)
 
-        const world = new THREE.SphereGeometry(5000, 1000, 1000);
+        const world = new THREE.SphereGeometry(4945, 1000, 1000);
 
         const vertexPositions = world.getAttribute('position').array;
         const vertexNormals = world.getAttribute('normal').array;
@@ -35,17 +35,20 @@ export class WaterSphere{
 
         const material = new THREE.MeshPhongMaterial({
             color: 0xbbbbff, // Deep blue color
-            transparent: true,
-            opacity: 0.4,
-            reflectivity: 1,
+            //transparent: true,
+            //opacity: 0.8,
+            reflectivity: 0.5,
             refractionRatio: 0.9, // Adjust the refraction ratio
-            shininess: 100, // Adjust shininess for specular highlights
+            shininess: 25, // Adjust shininess for specular highlights
             envMap: cubeRenderTarget.texture,
             specular: 0xffffff, // Adjust specular color
-            emissive: 0x00ff00, // No emissive color
+            emissive: 0xffffff, // No emissive color
+            emissiveIntensity: 0.5,
         });
 
         this.mesh = new THREE.Mesh(world, material)
+        this.mesh.receiveShadow = true
+        this.mesh.castShadow = true
     }
 
     add(scene){

@@ -7,7 +7,7 @@ export class Sky{
     //time
     constructor() {
         this.sky = new ThreeSky();
-        this.sky.scale.setScalar( 450000 );
+        this.sky.scale.setScalar( 45000 );
 
         this.sun = new THREE.Vector3();
 

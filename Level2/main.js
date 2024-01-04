@@ -11,7 +11,8 @@ const world = new WorldTerrain()
 new Scene([
     world,
     new Sky(),
-    ...world.getRandomTrees(0.07),
+    ...world.getRandomTrees(0.03),
+    ...world.getRandomRocks(0.3),
     new WaterSphere(),
     new Lights()
 
@@ -23,15 +24,11 @@ new Scene([
 /**
  * TODO:
  *
- * Add volumetric fog
- * Add textures to silt and water and snow
- * Add clouds
+ * deal with shadows
+ * deal with rocks exporting too high res
+ * deal with rocks appearing above terrain
  *
- * Make blender model of trees and rocks
- * add to world
+ * deal with jerky - make planet smaller? isaacs mesh?
  *
- * add physics - cannot go into world or tree etc
- * add flying camera only x above planet
- *
- * read on tiling perlin noise - modulo?
+ * add camera fly x high
  * */

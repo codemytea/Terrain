@@ -4,6 +4,7 @@ import {noise} from "./perlin";
 import {getRandomInt} from "./utils";
 import {Spherical} from "three";
 import {Tree} from "./Tree";
+import {FlatRock, LumpyRock, NormalRock} from "./Rock";
 
 export class WorldTerrain{
     material;
@@ -63,7 +64,7 @@ export class WorldTerrain{
         scene.add(this.mesh);
     }
     
-    getGrowablePositions(minHeight = 10, maxHeight= 220){
+    getPositions(minHeight, maxHeight){
         const vertexPositions = this.world.attributes.position;
         let sphericalPositions = []
         for (let i = 0; i < vertexPositions.count; i ++) {
@@ -76,17 +77,40 @@ export class WorldTerrain{
     }
 
     getRandomTrees(treesPerPosition){
-        let positions = this.getGrowablePositions()
+        let positions = this.getPositions(10, 200)
         let numberOfTrees = positions.length * treesPerPosition
         let trees = []
         for(let i = 0; i<Math.min(numberOfTrees, positions.length); i++){
             let randIndex = getRandomInt(0, positions.length - 1)
             let randPos = positions[randIndex]
-            trees.push(new Tree(randPos.radius, randPos.theta, randPos.phi, getRandomInt(6, 14)))
+            trees.push(new Tree(randPos.radius, randPos.theta, randPos.phi, getRandomInt(3, 20)))
             positions.splice(randIndex, 1)
         }
         return trees
 
+    }
+
+    getRandomRocks(rocksPerPosition){
+        let positions = this.getPositions(-20, -5)
+        let numberOfTrees = positions.length * rocksPerPosition
+        let trees = []
+        for(let i = 0; i<Math.min(numberOfTrees, positions.length); i+=3){
+            let randIndex = getRandomInt(0, positions.length - 1)
+            let randPos = positions[randIndex]
+            trees.push(new LumpyRock(randPos.radius, randPos.theta, randPos.phi, getRandomInt(1, 2)))
+            positions.splice(randIndex, 1)
+
+            randIndex = getRandomInt(0, positions.length - 1)
+            randPos = positions[randIndex]
+            trees.push(new NormalRock(randPos.radius, randPos.theta, randPos.phi, getRandomInt(1, 2)))
+            positions.splice(randIndex, 1)
+
+            randIndex = getRandomInt(0, positions.length - 1)
+            randPos = positions[randIndex]
+            trees.push(new FlatRock(randPos.radius, randPos.theta, randPos.phi, getRandomInt(1, 2)))
+            positions.splice(randIndex, 1)
+        }
+        return trees
     }
 }
 
@@ -124,9 +148,9 @@ const fragmentShader = `
     const float maxMossDistance = 5030.0;
     
     const float minSoilDistance = 5030.0;
-    const float maxSoilDistance = 5250.0;
+    const float maxSoilDistance = 5200.0;
     
-    const float minSnowDistance = 5250.0;
+    const float minSnowDistance = 5200.0;
     const float maxSnowDistance = 6000.0;
     
     vec3 hexToVec3(float r, float g, float b) {
@@ -148,7 +172,7 @@ const fragmentShader = `
         vec3 siltColour = hexToVec3(107.0, 116.0, 120.0);
         vec3 mossColour = hexToVec3(124.0, 142.0, 81.0);
         vec3 soilColour = hexToVec3(65.0, 65.0, 65.0);
-        vec3 snowColour = hexToVec3(207.0, 217.0, 206.0);
+        vec3 snowColour = hexToVec3(56.0, 116.0, 71.0);
     
         float tRiver = smoothstep(minRiverDistance, maxRiverDistance, distance);
         float tSilt = smoothstep(minSiltDistance, maxSiltDistance, distance);

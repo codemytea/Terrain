@@ -76,7 +76,7 @@ function animate() {
 //is being in a box the right thing - see with terrains
     //procedural sky - creating a shader that simulates a realistic sky, complete with clouds, sun, and atmospheric effects.
     //rain/snow/star particle system
-//procedural terrain generation with three js
+//procedural Level2 generation with three js
 //add light sources
 //add auto movement through
 //add arrow controls

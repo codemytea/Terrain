@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
-import {TerrainGenerator} from './terrain.js'
-import {SimplexNoise} from "three/addons";
+import {GLTFLoader, SimplexNoise} from "three/addons";
 import { Sky } from 'three/addons/objects/Sky.js';
 import { Water } from 'three/addons/objects/Water2.js';
 import {GUI} from "dat.gui";
@@ -101,7 +100,10 @@ function setup(){
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87CEEB);
     let fog = new THREE.Fog(0xffffff, 100, 1000 );
-    scene.fog = fog;
+    //scene.fog = fog;
+
+    let al = new THREE.AmbientLight(0xffffff, 10)
+    scene.add(al)
 
     camera = new THREE.PerspectiveCamera(60, width / height, 1, 10000);
     camera.position.set(0, 0, 10000)
@@ -144,7 +146,9 @@ function setup(){
     });
 
     const mesh = new THREE.Mesh(world, material);
-    scene.add(mesh);
+    //scene.add(mesh);
+
+    blenderTreeInit("../lowPolyTree.glb", 0, 0, 0, 10).then(r => scene.add(r))
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(width, height);
@@ -154,7 +158,7 @@ function setup(){
     controls.movementSpeed = 1500;
     controls.lookSpeed = 0.1;
 
-    initSky();
+   // initSky();
 
     eventListeners();
     animate();
@@ -236,6 +240,24 @@ function animate(){
 }
 
 setup();
+
+
+async function blenderTreeInit(filename, x, y, z, scale){
+    let loader = new GLTFLoader()
+    let gltf = await new Promise(resolve => loader.load(filename,  (gltf)=> resolve(gltf)))
+    gltf.scene.traverse((node)=>{
+        if (node.isMesh) {
+            node.castShadow = true
+            node.receiveShadow = true
+        }
+    })
+    gltf.scene.castShadow = true
+    gltf.scene.receiveShadow = true
+    gltf.scene.position.set(x, y, z)
+    gltf.scene.scale.set(scale, scale, scale)
+
+    return gltf.scene
+}
 
 /**
  * TODO:

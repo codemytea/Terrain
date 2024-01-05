@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import {SimplexNoise} from "three/addons";
-import {getRandomInt} from "./utils";
-import {Renderer} from "./Renderer";
+import {getRandomInt} from "../Shared/utils";
+import {Renderer} from "../Shared/Renderer";
 
 export class WaterSphere{
     constructor() {

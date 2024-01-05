@@ -1,4 +1,3 @@
-import {GLTFLoader} from "three/addons";
 import {BlenderModel} from "./BlenderModel";
 
 export class Tree extends BlenderModel{

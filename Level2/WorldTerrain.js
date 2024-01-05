@@ -1,10 +1,10 @@
 import * as THREE from "three";
 import {SimplexNoise} from "three/addons";
 import {noise} from "./perlin";
-import {getRandomInt} from "./utils";
+import {getRandomInt} from "../Shared/utils";
 import {Spherical} from "three";
-import {Tree} from "./Tree";
-import {FlatRock, LumpyRock, NormalRock} from "./Rock";
+import {Tree} from "../Shared/Tree";
+import {FlatRock, LumpyRock, NormalRock} from "../Level1/Rock";
 
 export class WorldTerrain{
     material;

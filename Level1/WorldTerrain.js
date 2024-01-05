@@ -5,7 +5,7 @@ export class WorldTerrain{
     world;
 
     constructor() {
-        this.world = new THREE.SphereGeometry(100, 10, 10);
+        this.world = new THREE.SphereGeometry(200, 50, 50);
 
         this.mesh = new THREE.Mesh(this.world, new THREE.MeshBasicMaterial());
         this.mesh.receiveShadow = true

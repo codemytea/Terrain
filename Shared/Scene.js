@@ -4,7 +4,7 @@ import {Renderer} from "./Renderer";
 
 export class Scene{
 
-    constructor(objects) {
+    constructor(objects, cameraStart, movementSpeed) {
 
         this.objects = objects
 
@@ -14,10 +14,10 @@ export class Scene{
 
 
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-        this.camera.position.set(0, 0, 5300)
+        this.camera.position.set(0, 0, cameraStart)
         this.camera.rotateZ(Math.PI*2)
         this.controls = new FirstPersonControls(this.camera, Renderer.instance.renderer.domElement);
-        this.controls.movementSpeed = 150;
+        this.controls.movementSpeed = movementSpeed;
         this.controls.lookSpeed = 0.1;
         this.objects.forEach(o => o.add(this.scene))
 

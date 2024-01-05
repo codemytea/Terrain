@@ -18,7 +18,7 @@ import {LumpyRock} from "../Level1/Rock";
 //     new WaterSphere(),
 //     new Lights()
 //
-// ]).display()
+// ], 5300, 150).display()
 
 const scene1World = new WorldTerrain()
 
@@ -29,7 +29,7 @@ new Scene([
     new House(0, 0),
     new LumpyRock(1, 1, 2)
 
-]).display()
+], 400, 50).display()
 
 
 

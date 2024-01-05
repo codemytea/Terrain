@@ -3,8 +3,10 @@ import {FirstPersonControls} from "three/addons/controls/FirstPersonControls";
 import {Renderer} from "./Renderer";
 
 export class Scene{
+    movementAllowed;
 
-    constructor(objects, cameraStart, movementSpeed) {
+    constructor(objects, cameraStart, movementSpeed, movementAllowed = true) {
+        this.movementAllowed = movementAllowed
 
         this.objects = objects
 
@@ -16,10 +18,17 @@ export class Scene{
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
         this.camera.position.set(0, 0, cameraStart)
         this.camera.rotateZ(Math.PI*2)
-        this.controls = new FirstPersonControls(this.camera, Renderer.instance.renderer.domElement);
-        this.controls.movementSpeed = movementSpeed;
-        this.controls.lookSpeed = 0.1;
+        if (this.movementAllowed){
+            this.controls = new FirstPersonControls(this.camera, Renderer.instance.renderer.domElement);
+            this.controls.movementSpeed = movementSpeed;
+            this.controls.lookSpeed = 0.1;
+        }
+
+        //start loading
+
         this.objects.forEach(o => o.add(this.scene))
+
+        //stop loading
 
         this.setupWindow()
     }
@@ -29,7 +38,10 @@ export class Scene{
         const loop = ()=>{
             requestAnimationFrame(loop);
             const d = clock.getDelta()
-            this.controls.update(d);
+            if (this.movementAllowed){
+                this.controls.update(d);
+            }
+
 
             this.objects.forEach((o)=>{
                 if(!!o.onNewFrame){
@@ -49,7 +61,11 @@ export class Scene{
             this.camera.updateProjectionMatrix();
 
             Renderer.instance.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.controls.handleResize();
+            
+            if (this.movementAllowed){
+                this.controls.handleResize();
+            }
+
         });
     }
 

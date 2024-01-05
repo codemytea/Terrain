@@ -1,21 +1,22 @@
 import * as THREE from "three";
+import {FrontSide, Plane} from "three";
 
 export class WorldTerrain{
     mesh;
-    world;
 
-    constructor() {
-        this.world = new THREE.SphereGeometry(200, 50, 50);
+    constructor(PLANE_SIZE = 30, BLADE_COUNT = 100000, BLADE_WIDTH = 0.1, BLADE_HEIGHT = 0.8, BLADE_HEIGHT_VARIATION = 0.6) {
+        const world = new THREE.PlaneGeometry(PLANE_SIZE, PLANE_SIZE)
 
-        this.mesh = new THREE.Mesh(this.world, new THREE.MeshBasicMaterial());
-        this.mesh.receiveShadow = true
-        this.mesh.castShadow = true
-        this.mesh.position.set(0, 0, 0)
+        this.mesh = new THREE.Mesh(world) //grassbuffer?)
+
     }
 
 
     add(scene){
-        scene.add(this.mesh);
+        scene.add(this.mesh)
+
     }
+
 }
+
 

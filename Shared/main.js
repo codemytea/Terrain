@@ -12,7 +12,7 @@ const startingWorld = new WT1()
 
 let level1 = new Scene([
     startingWorld,
-    ...startingWorld.getRandomTrees(0.003),
+    ...startingWorld.getRandomTrees(0.0009),
     ...startingWorld.getRandomRocks(0.003),
     new Grass(),
     new Sky(DUSTY_EVENING_SKY),

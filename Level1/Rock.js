@@ -3,7 +3,7 @@ import {PlanarModel} from "../Shared/Models/PlanarModel";
 
 export class LumpyRock extends PlanarModel{
     constructor(x, y, z) {
-        super(x, y, z, 1, "../Assets/lowPolyTree.glb");
+        super(x, y, z, 1, "../Assets/lowPolyRockLumpy.glb");
     }
 }
 

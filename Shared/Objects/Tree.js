@@ -11,6 +11,6 @@ export class WorldTree extends SphericalModel {
 
 export class FieldTree extends PlanarModel {
     constructor(x, y, z) {
-        super(x, y, z, 1, "../../Assets/lowPolyTree.glb")
+        super(x, y, z, 0.5, "../../Assets/lowPolyTree.glb")
     }
 }

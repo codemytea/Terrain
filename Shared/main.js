@@ -19,20 +19,23 @@ let level1 = new Scene([
     new Lights(),
     new House()
 
-], 200, 50)
+], [0, 5, 20], 10)
 
 
 
 /*************************LEVEL 2 - FULL WORLD SPHERE***********************/
 const fullWorld = new WT2()
-let level2 = new Scene([
+let level2 = new Scene(
+    [
     fullWorld,
      new Sky(DUSTY_EVENING_SKY),
      ...fullWorld.getRandomTrees(0.01),
      new WaterSphere(),
      new Lights()
-
- ], -5300, 300)
+    ],
+    [0, 0,-5300],
+    300
+)
 
 
 

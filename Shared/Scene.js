@@ -19,7 +19,7 @@ export class Scene{
 
 
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-        this.camera.position.set(0, 0, cameraStart)
+        this.camera.position.set(...cameraStart)
         this.camera.rotateZ(Math.PI*2)
         if (this.movementAllowed){
             this.controls = new FlyControls(this.camera, Renderer.instance.renderer.domElement);

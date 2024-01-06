@@ -15,6 +15,7 @@ export class Lights {
     constructor() {
         this.lights = [
             Lights.PointLight(15000, 15000, -15000),
+            Lights.PointLight(15000, 15000, 15000)
 
         ]
 

@@ -54,6 +54,10 @@ export class WorldTerrain{
 
     add(scene){
         scene.add(this.mesh)
+        const houseLight = new THREE.PointLight(0xffffff, 200)
+        houseLight.position.set(0, 2, 0)
+        houseLight.power = 1000
+        scene.add(houseLight)
     }
 
 }

@@ -109,6 +109,12 @@ let level2 = new Scene([
 /**
  * TODO:
  *
+ * segment this file - disable listeners
+ *
+ * integrate with arrow controls
+ *
+ * stop being able to move off scene or into model in level 1.
+ *
  * deal with rocks exporting too high res
  *
  * deal with jerky - isaacs mesh?

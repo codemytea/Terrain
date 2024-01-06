@@ -1,7 +1,6 @@
 import * as THREE from "three";
-import {FrontSide, Plane, Spherical} from "three";
-import {getRandomFloat, getRandomInt} from "../Shared/utils";
-import {Tree} from "../Shared/Objects/Tree";
+import {getRandomXYZAvoiding} from "../Shared/utils";
+import {FieldTree} from "../Shared/Objects/Tree";
 import {FlatRock, LumpyRock, NormalRock} from "./Rock";
 
 export class WorldTerrain{
@@ -19,31 +18,42 @@ export class WorldTerrain{
         let numberOfTrees = this.world.attributes.position.array.length * density
         let trees = []
         for (let i = 0; i<numberOfTrees; i++){
-            trees.push(new Tree(0, getRandomFloat(50, 100), 0, 1, false, getRandomFloat(50, 100)))
-
+            trees.push(
+                new FieldTree(
+                    ...getRandomXYZAvoiding(90, 45, [10, 90])
+                )
+            )
         }
         return trees
-
     }
 
 
     getRandomRocks(density){
-        let numberOfRocks = (this.world.attributes.position.array.length * density)/3
+        let numberOfRocks = (this.world.attributes.position.array.length * density)
         let rocks = []
-        for (let i = 0; i<numberOfRocks; i++){
-            rocks.push(new LumpyRock(0, getRandomFloat(50, 100), 0, 1, false, getRandomFloat(50, 100)))
-            rocks.push(new NormalRock(0, getRandomFloat(50, 100), 0, 1, false, getRandomFloat(50, 100)))
-            rocks.push(new FlatRock(0, getRandomFloat(50, 100), 0, 1, false, getRandomFloat(50, 100)))
-
+        for (let i = 0; i<numberOfRocks; i+=3){
+            rocks.push(
+                new LumpyRock(
+                    ...getRandomXYZAvoiding(90, 45, [30, 70])
+                )
+            )
+            rocks.push(
+                new NormalRock(
+                    ...getRandomXYZAvoiding(90, 45, [30, 70])
+                )
+            )
+            rocks.push(
+                new FlatRock(
+                    ...getRandomXYZAvoiding(90, 45, [30, 70])
+                )
+            )
         }
         return rocks
-
     }
 
 
     add(scene){
         scene.add(this.mesh)
-
     }
 
 }

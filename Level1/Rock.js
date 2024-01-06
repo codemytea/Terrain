@@ -1,25 +1,20 @@
 import {GLTFLoader} from "three/addons";
-import {BlenderModel} from "../Shared/Models/BlenderModel";
+import {PlanarModel} from "../Shared/Models/PlanarModel";
 
-export class LumpyRock extends BlenderModel{
-
-    constructor(r, theta, phi, scale, isCircular, negativeAdjustment = 15) {
-        super(r, theta, phi, scale, "../Assets/lowPolyTree.glb", negativeAdjustment, isCircular);
-    }
-}
-    constructor(theta, phi, scale) {
-        super(200, theta, phi, scale, "../Assets/lowPolyRockLumpy.glb", 2, false);
+export class LumpyRock extends PlanarModel{
+    constructor(x, y, z) {
+        super(x, y, z, 1, "../Assets/lowPolyTree.glb");
     }
 }
 
-export class NormalRock extends BlenderModel{
-    constructor(theta, phi, scale) {
-        super(200, theta, phi, scale, "../Assets/lowPolyRockNormal.glb", 2, false);
+export class NormalRock extends PlanarModel{
+    constructor(x, y, z) {
+        super(x, y, z, 1, "../Assets/lowPolyRockNormal.glb");
     }
 }
 
-export class FlatRock extends BlenderModel{
-    constructor(theta, phi, scale) {
-        super(200, theta, phi, scale, "../Assets/lowPolyRockFlat.glb", 2, false);
+export class FlatRock extends PlanarModel{
+    constructor(x, y, z) {
+        super(x, y, z, 1, "../Assets/lowPolyRockFlat.glb");
     }
 }

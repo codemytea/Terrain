@@ -1,13 +1,10 @@
 import * as THREE from "three";
-import {Spherical, UniformsLib} from "three";
+import {Spherical} from "three";
 import {SimplexNoise} from "three/addons";
 import {noise} from "./perlin";
 import {getRandomInt} from "../Shared/utils";
-import {Tree} from "../Shared/Objects/Tree";
-import {FlatRock, LumpyRock, NormalRock} from "../Level1/Rock";
-import {mergeUniforms} from "three/src/renderers/shaders/UniformsUtils";
-import {CustomShadowMaterial} from "./CustomShadownMaterial";
-import {uniform} from "three/nodes";
+import {WorldTree} from "../Shared/Objects/Tree";
+import {CustomShadowMaterial} from "./CustomShadowMaterial";
 
 export class WorldTerrain{
     material;
@@ -84,35 +81,13 @@ export class WorldTerrain{
         for(let i = 0; i<Math.min(numberOfTrees, positions.length); i++){
             let randIndex = getRandomInt(0, positions.length - 1)
             let randPos = positions[randIndex]
-            trees.push(new Tree(randPos.radius, randPos.theta, randPos.phi, getRandomInt(3, 20)))
+            trees.push(new WorldTree(randPos.radius, randPos.theta, randPos.phi, getRandomInt(3, 20)))
             positions.splice(randIndex, 1)
         }
         return trees
 
     }
 
-    getRandomRocks(rocksPerPosition){
-        let positions = this.getPositions(-20, -5)
-        let numberOfTrees = positions.length * rocksPerPosition
-        let trees = []
-        for(let i = 0; i<Math.min(numberOfTrees, positions.length); i+=3){
-            let randIndex = getRandomInt(0, positions.length - 1)
-            let randPos = positions[randIndex]
-            trees.push(new LumpyRock(randPos.radius, randPos.theta, randPos.phi, getRandomInt(1, 2)))
-            positions.splice(randIndex, 1)
-
-            randIndex = getRandomInt(0, positions.length - 1)
-            randPos = positions[randIndex]
-            trees.push(new NormalRock(randPos.radius, randPos.theta, randPos.phi, getRandomInt(1, 2)))
-            positions.splice(randIndex, 1)
-
-            randIndex = getRandomInt(0, positions.length - 1)
-            randPos = positions[randIndex]
-            trees.push(new FlatRock(randPos.radius, randPos.theta, randPos.phi, getRandomInt(1, 2)))
-            positions.splice(randIndex, 1)
-        }
-        return trees
-    }
 }
 
 const terrainShader = `

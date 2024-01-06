@@ -1,32 +1,19 @@
 import {Scene} from "./Scene";
-import {WorldTerrain} from "../Level1/WorldTerrain";
-import {DUSTY_EVENING_SKY, MORNING_SKY, Sky} from "./Sky";
+import {WorldTerrain as WT1} from "../Level1/WorldTerrain";
+import {WorldTerrain as WT2} from "../Level2/WorldTerrain";
+import {DUSTY_EVENING_SKY, Sky} from "./Objects/Sky";
 import {WaterSphere} from "../Level2/WaterSphere";
-import {Lights} from "./Lights";
+import {Lights} from "./Objects/Lights";
 import {House} from "../Level1/House";
-import {LumpyRock} from "../Level1/Rock";
 import {Grass} from "../Level1/Grass";
 
+/*************************LEVEL 1 - FLAT GRASSY PLANE***********************/
+const startingWorld = new WT1()
 
-
-
-const world = new WT2()
-let s1 = new Scene([
-     world,
-     new Sky(DUSTY_EVENING_SKY),
-     ...world.getRandomTrees(0.01),
-     //...world.getRandomRocks(0.3),
-     new WaterSphere(),
-     new Lights()
-
- ], -5300, 300)
-
-const scene1World = new WT1()
-
-let s2 = new Scene([
-    scene1World,
-    ...scene1World.getRandomTrees(0.003),
-    //...scene1World.getRandomRocks(0.3),
+let level1 = new Scene([
+    startingWorld,
+    ...startingWorld.getRandomTrees(0.003),
+    ...startingWorld.getRandomRocks(0.003),
     new Grass(),
     new Sky(DUSTY_EVENING_SKY),
     new Lights(),
@@ -34,7 +21,22 @@ let s2 = new Scene([
 
 ], 200, 50)
 
-s1.display()
+
+
+/*************************LEVEL 2 - FULL WORLD SPHERE***********************/
+const fullWorld = new WT2()
+let level2 = new Scene([
+    fullWorld,
+     new Sky(DUSTY_EVENING_SKY),
+     ...fullWorld.getRandomTrees(0.01),
+     new WaterSphere(),
+     new Lights()
+
+ ], -5300, 300)
+
+
+
+level1.display()
 
 
 

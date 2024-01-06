@@ -1,8 +1,16 @@
-import {BlenderModel} from "../Models/BlenderModel";
+import {SphericalModel} from "../Models/SphericalModel";
+import {getRandomInt} from "../utils";
+import {PlanarModel} from "../Models/PlanarModel";
 
-export class Tree extends BlenderModel{
+export class WorldTree extends SphericalModel {
+    constructor(r, theta, phi) {
+        super(r, theta, phi, getRandomInt(3, 20), 15, "../../Assets/lowPolyTree.glb")
+    }
 
-    constructor(r, theta, phi, scale, isCircular, negativeAdjustment = 15) {
-        super(r, theta, phi, scale, "../Assets/lowPolyTree.glb", negativeAdjustment, isCircular);
+}
+
+export class FieldTree extends PlanarModel {
+    constructor(x, y, z) {
+        super(x, y, z, 1, "../../Assets/lowPolyTree.glb")
     }
 }

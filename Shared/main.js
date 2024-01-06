@@ -6,6 +6,7 @@ import {WaterSphere} from "../Level2/WaterSphere";
 import {Lights} from "./Objects/Lights";
 import {House} from "../Level1/House";
 import {Grass} from "../Level1/Grass";
+import {ArrowControls} from "./ArrowControls";
 
 /*************************LEVEL 1 - FLAT GRASSY PLANE***********************/
 const startingWorld = new WT1()
@@ -22,26 +23,19 @@ let level1 = new Scene([
 ], [0, 5, 20], 10)
 
 
-
-/*************************LEVEL 2 - FULL WORLD SPHERE***********************/
 const fullWorld = new WT2()
-let level2 = new Scene(
-    [
+const arrowControls = new ArrowControls(-1010, fullWorld.mesh)
+let level2 = new Scene([
     fullWorld,
-     new Sky(DUSTY_EVENING_SKY),
-     ...fullWorld.getRandomTrees(0.1),
-     new WaterSphere(),
-     new Lights()
-    ],
-    [0, 0, 1300],
-    300
-)
+    new Sky(DUSTY_EVENING_SKY),
+    //...fullWorld.getRandomTrees(0.1),
+    new WaterSphere(),
+    new Lights(),
+    arrowControls
 
 
-
+], arrowControls.camera, 300)
 level2.display()
-
-
 
 
 /**

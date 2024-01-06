@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import {FrontSide, Plane, Spherical} from "three";
 import {getRandomFloat, getRandomInt} from "../Shared/utils";
-import {Tree} from "../Shared/Tree";
+import {Tree} from "../Shared/Objects/Tree";
+import {FlatRock, LumpyRock, NormalRock} from "./Rock";
 
 export class WorldTerrain{
     mesh;
@@ -27,6 +28,15 @@ export class WorldTerrain{
 
 
     getRandomRocks(density){
+        let numberOfRocks = (this.world.attributes.position.array.length * density)/3
+        let rocks = []
+        for (let i = 0; i<numberOfRocks; i++){
+            rocks.push(new LumpyRock(0, getRandomFloat(50, 100), 0, 1, false, getRandomFloat(50, 100)))
+            rocks.push(new NormalRock(0, getRandomFloat(50, 100), 0, 1, false, getRandomFloat(50, 100)))
+            rocks.push(new FlatRock(0, getRandomFloat(50, 100), 0, 1, false, getRandomFloat(50, 100)))
+
+        }
+        return rocks
 
     }
 

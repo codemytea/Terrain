@@ -3,7 +3,7 @@ import {SimplexNoise} from "three/addons";
 import {noise} from "./perlin";
 import {getRandomInt} from "../Shared/utils";
 import {Spherical} from "three";
-import {Tree} from "../Shared/Tree";
+import {Tree} from "../Shared/Objects/Tree";
 import {FlatRock, LumpyRock, NormalRock} from "../Level1/Rock";
 
 export class WorldTerrain{

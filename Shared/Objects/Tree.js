@@ -1,4 +1,4 @@
-import {BlenderModel} from "./BlenderModel";
+import {BlenderModel} from "../Models/BlenderModel";
 
 export class Tree extends BlenderModel{
 

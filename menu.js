@@ -1,5 +1,5 @@
 import {Scene} from './Shared/Scene.js'
-import {MORNING_SKY, Sky} from './Shared/Sky.js'
+import {MORNING_SKY, Sky} from './Shared/Objects/Sky.js'
 
 
 new Scene([

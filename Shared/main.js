@@ -1,8 +1,8 @@
 import {Scene} from "./Scene";
 import {WorldTerrain} from "../Level1/WorldTerrain";
-import {DUSTY_EVENING_SKY, MORNING_SKY, Sky} from "./Sky";
+import {DUSTY_EVENING_SKY, MORNING_SKY, Sky} from "./Objects/Sky";
 import {WaterSphere} from "../Level2/WaterSphere";
-import {Lights} from "./Lights";
+import {Lights} from "./Objects/Lights";
 import {House} from "../Level1/House";
 import {LumpyRock} from "../Level1/Rock";
 import {Grass} from "../Level1/Grass";

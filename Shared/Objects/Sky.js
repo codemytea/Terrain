@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {Renderer} from "./Renderer";
+import {Renderer} from "../Renderer";
 import {Sky as ThreeSky} from "three/addons/objects/Sky.js";
 
 

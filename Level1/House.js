@@ -1,4 +1,4 @@
-import {BlenderModel} from "../Shared/BlenderModel";
+import {BlenderModel} from "../Shared/Models/BlenderModel";
 
 export class House extends BlenderModel{
 

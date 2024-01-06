@@ -40,6 +40,7 @@ export class BlenderModel{
         model.receiveShadow = true
 
         return model;
+
     }
 
     static async loadModel(filename){

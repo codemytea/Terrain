@@ -25,10 +25,12 @@ const scene1World = new WorldTerrain()
 
 new Scene([
     scene1World,
-    new Grass(),
+    //new Grass(),
+    ...scene1World.getRandomTrees(0.003),
+    //...scene1World.getRandomRocks(0.3),
     new Sky(DUSTY_EVENING_SKY),
     new Lights(),
-    new House(0, 0),
+    new House(),
     //new LumpyRock(1, 1, 2)
 
 ], 200, 50).display()

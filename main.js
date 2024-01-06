@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('menu').style.display = 'none'
         document.getElementById('gameplayContent').style.display = 'block'
-        level1.display()
+        level2.display()
 
         audioLoader.load(stream, function(buffer) {
             audio.setBuffer(buffer);
@@ -59,6 +59,7 @@ let level1 = new Scene([
 
 let treesPlanted = 0;
 const goal = 10;
+
 
 function updateHUD() {
 
@@ -97,12 +98,13 @@ const arrowControls = new ArrowControls(-1010, fullWorld.mesh)
 let level2 = new Scene([
     fullWorld,
     new Sky(DUSTY_EVENING_SKY),
-    //...fullWorld.getRandomTrees(0.1),
+    ...fullWorld.getRandomTrees(0.1),
     new WaterSphere(),
     new Lights(),
     arrowControls
 
-], arrowControls.camera, 300)
+], arrowControls.camera, 300, false, true)
+
 
 
 

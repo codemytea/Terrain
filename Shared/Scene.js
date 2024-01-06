@@ -8,19 +8,23 @@ export class Scene{
     movementAllowed;
     startTime = Date.now();
 
-    constructor(objects, cameraStart, movementSpeed, movementAllowed = true) {
+    constructor(objects, cameraParams, movementSpeed, movementAllowed = true, cameraProvided = false) {
         this.movementAllowed = movementAllowed
 
         this.objects = objects
+        this.camera = cameraParams
 
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x87CEEB);
         this.scene.fog = new THREE.Fog(0xffffff, 0.1, 200);
 
 
-        this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
-        this.camera.position.set(cameraStart[0], cameraStart[1], cameraStart[2])
-        this.camera.rotateZ(Math.PI*2)
+
+        if(!cameraProvided){
+            this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+            this.camera.position.set(cameraParams[0], cameraParams[1], cameraParams[2])
+            this.camera.rotateZ(Math.PI*2)
+        }
         if (this.movementAllowed){
             this.controls = new FlyControls(this.camera, Renderer.instance.renderer.domElement);
             this.controls.movementSpeed = movementSpeed;

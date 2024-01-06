@@ -5,6 +5,7 @@ import {WaterSphere} from "../Level2/WaterSphere";
 import {Lights} from "./Lights";
 import {House} from "../Level1/House";
 import {LumpyRock} from "../Level1/Rock";
+import {Grass} from "../Level1/Grass";
 
 
 
@@ -23,13 +24,14 @@ import {LumpyRock} from "../Level1/Rock";
 const scene1World = new WorldTerrain()
 
 new Scene([
-    scene1World,
+    //scene1World,
+    new Grass(),
     new Sky(DUSTY_EVENING_SKY),
     new Lights(),
     //new House(0, 0),
     //new LumpyRock(1, 1, 2)
 
-], 400, 50).display()
+], 200, 50).display()
 
 
 

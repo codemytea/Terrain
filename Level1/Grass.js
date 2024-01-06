@@ -28,7 +28,7 @@ export class Grass{
         const colors = [];
 
         for (let i = 0; i < 1000000; i++) {
-            const vec = getRandomXYZAvoiding(90, 45, [40, 60])
+            const vec = getRandomXYZAvoiding(100, 50, [38, 62])
 
             const pos = new THREE.Vector3(vec[0], vec[1], vec[2]);
 

@@ -2,6 +2,7 @@ import * as THREE from "three";
 import {getRandomXYZAvoiding} from "../Shared/utils";
 import {FieldTree} from "../Shared/Objects/Tree";
 import {FlatRock, LumpyRock, NormalRock} from "./Rock";
+import {DoubleSide} from "three";
 
 export class WorldTerrain{
     mesh;
@@ -13,20 +14,20 @@ export class WorldTerrain{
 
     init(){
         return new Promise((r) => {
-            this.world = new THREE.PlaneGeometry(100, 100, 50, 50)
+            this.world =new THREE.PlaneGeometry(100, 100, 50, 50);
             this.world.rotateX(-Math.PI/2)
 
             let loader = new THREE.TextureLoader();
 
-            loader.load('../grass.png', (t)=> {
+            loader.load('../Assets/muddy_ground.png', (t)=> {
                 t.wrapS = THREE.RepeatWrapping
                 t.wrapT = THREE.RepeatWrapping
                 t.repeat.set(10, 10)
 
-                let mesh = new THREE.Mesh(world, new THREE.MeshStandardMaterial({map: t}));
-                // mesh.receiveShadow = true
-                // mesh.castShadow = true
-                // mesh.position.set(0, 0, 0)
+                let mesh = new THREE.Mesh(this.world, new THREE.MeshStandardMaterial({map: t, side: THREE.DoubleSide}));
+                mesh.receiveShadow = true
+                mesh.castShadow = true
+                mesh.position.set(0, 0, 0)
                 r(mesh)
 
             })
@@ -40,7 +41,7 @@ export class WorldTerrain{
         for (let i = 0; i<numberOfTrees; i++){
             trees.push(
                 new FieldTree(
-                    ...getRandomXYZAvoiding(90, 45, [10, 90])
+                    ...getRandomXYZAvoiding(100, 50, [38, 62])
                 )
             )
         }
@@ -54,17 +55,17 @@ export class WorldTerrain{
         for (let i = 0; i<numberOfRocks; i+=3){
             rocks.push(
                 new LumpyRock(
-                    ...getRandomXYZAvoiding(90, 45, [30, 70])
+                    ...getRandomXYZAvoiding(100, 50, [38, 62])
                 )
             )
             rocks.push(
                 new NormalRock(
-                    ...getRandomXYZAvoiding(90, 45, [30, 70])
+                    ...getRandomXYZAvoiding(100, 50, [38, 62])
                 )
             )
             rocks.push(
                 new FlatRock(
-                    ...getRandomXYZAvoiding(90, 45, [30, 70])
+                    ...getRandomXYZAvoiding(100, 50, [38, 62])
                 )
             )
         }

@@ -1,16 +1,21 @@
 import * as THREE from "three"
 import {Clock, Spherical} from "three"
-import {cameraPosition} from "three/nodes";
+import {cameraPosition, sign} from "three/nodes";
 
-const maxV = 40/(Math.PI*10)
-const a = 40/(Math.PI*10)
-const g = 40/(Math.PI*10)
+const maxV = 10
+const a = 20
+const g = 10
+
+
+const xAxis = /*@__PURE__*/ new THREE.Vector3( 1, 0, 0 );
+const yAxis = /*@__PURE__*/ new THREE.Vector3( 0, 1, 0 );
+const ZAxis = /*@__PURE__*/ new THREE.Vector3( 0, 0, 1 );
 export class ArrowControls{
 
 
 
     camera; controls;
-    velocity = new THREE.Spherical(0, 0, 0);
+    velocity = {forward: 0, left: 0}
     left = false;
     right = false;
     forwards = false;
@@ -21,6 +26,8 @@ export class ArrowControls{
     rotateDown = false
 
     clock = new Clock()
+
+    currentPhi
 
     raycaster = new THREE.Raycaster(new THREE.Vector3(0, 0, 0), new THREE.Vector3(1, 0, 0), 0, 100);
     constructor(cameraStart, world) {
@@ -37,6 +44,7 @@ export class ArrowControls{
             trueTheta = -trueTheta
         }
         this.camera.rotation.set(truePhi, trueTheta, rotation.z)
+        this.currentPhi = sphericalPosition.phi
         //this.controls = new SphericalPointerLockControls(this.camera, document.body);
         this.world = world
         document.addEventListener( 'keydown', (e)=>this.onKeyDown(e) );
@@ -52,17 +60,17 @@ export class ArrowControls{
 
     decelerate(dt){
         let a = g
-        if(this.velocity.theta > 0){
-            this.velocity.theta = Math.max(0, this.velocity.theta - a * dt)
+        if(this.velocity.forward > 0){
+            this.velocity.forward = Math.max(0, this.velocity.forward - a * dt)
         }
         else {
-            this.velocity.theta = Math.min(0, this.velocity.theta + a * dt)
+            this.velocity.forward = Math.min(0, this.velocity.forward + a * dt)
         }
-        if(this.velocity.phi > 0){
-            this.velocity.phi = Math.max(0, this.velocity.phi - a * dt)
+        if(this.velocity.left > 0){
+            this.velocity.left = Math.max(0, this.velocity.left - a * dt)
         }
         else {
-            this.velocity.phi = Math.min(0, this.velocity.phi + a * dt)
+            this.velocity.left = Math.min(0, this.velocity.left + a * dt)
         }
 
 
@@ -87,6 +95,9 @@ export class ArrowControls{
 
     }
 
+    signPhi = -1
+    signTheta = 1
+
     async onNewFrame(){
         let dt = this.clock.getDelta()
 
@@ -104,48 +115,67 @@ export class ArrowControls{
         if(this.rotateDown) dViewUD -= dt/(Math.PI)
 
 
-
-        let dTheta = this.velocity.theta * dt
-        let dPhi = this.velocity.phi * dt
         let dr = -await this.getDistanceFromGround()
 
 
 
         let pos = this.camera.position
         let sphericalPos = new Spherical().setFromCartesianCoords(pos.x, pos.y, pos.z)
-        console.log([sphericalPos.theta*180/Math.PI, sphericalPos.phi*180/Math.PI])
 
-        let newTheta = sphericalPos.theta + dTheta
-        let newPhi = sphericalPos.phi + dPhi
         let newR = sphericalPos.radius + dr + 20
 
+        this.camera.position.setFromSphericalCoords(newR, sphericalPos.phi, sphericalPos.theta)
 
-        this.camera.position.setFromSphericalCoords(newR, newPhi, newTheta)
+        let facingForward = this.camera.getWorldDirection(new THREE.Vector3()).normalize().multiplyScalar(this.velocity.forward)
+        let position = this.camera.getWorldPosition(new THREE.Vector3()).normalize()
+        let facingLeft = new THREE.Vector3(0, 0, 0)
+        let oldPos = new THREE.Vector3(this.camera.position.x, this.camera.position.y, this.camera.position.z)
+        this.camera.position.set(facingForward.x + facingLeft.x + oldPos.x, facingForward.y + facingLeft.y + oldPos.y, facingForward.z + facingLeft.z + oldPos.z)
+        let newPos = this.camera.position
+        let oldPosSpherical = new Spherical().setFromCartesianCoords(oldPos.x, oldPos.y, oldPos.z)
+        let newPosSpherical = new Spherical().setFromCartesianCoords(newPos.x, newPos.y, newPos.z)
+
+        let dTheta = newPosSpherical.theta - oldPosSpherical.theta
+        let dPhi = newPosSpherical.phi - oldPosSpherical.phi
+
+
+        if(Math.abs(dTheta) < 1) {
+            this.camera.rotateOnWorldAxis(yAxis, dTheta * this.signTheta)
+        } else{
+            this.signPhi = -this.signPhi
+        }
+        if(Math.abs(dPhi) < 1) {
+            this.camera.rotateOnWorldAxis(xAxis, this.signPhi * dPhi)
+        }
+        else{
+            this.signTheta =  -this.signTheta
+        }
 
 
 
-        this.camera.rotateY(dTheta + dViewLR)
-        this.camera.rotateX(dPhi + dViewUD)
+
+
+
 
 
 
     }
 
 
-    onLeft(dt){
-        this.velocity.theta = Math.max(-maxV, this.velocity.theta - dt * a)
-    }
-
-    onForward(dt){
-        this.velocity.phi = Math.max(-maxV, this.velocity.phi - dt * a)
+    onRight(dt){
+        this.velocity.left = Math.max(-maxV, this.velocity.left - dt * a)
     }
 
     onBackward(dt){
-        this.velocity.phi = Math.min(maxV, this.velocity.phi + dt * a)
+        this.velocity.forward = Math.max(-maxV, this.velocity.forward - dt * a)
     }
 
-    onRight(dt){
-        this.velocity.theta = Math.min(maxV, this.velocity.theta + dt * a)
+    onForward(dt){
+        this.velocity.forward = Math.min(maxV, this.velocity.forward + dt * a)
+    }
+
+    onLeft(dt){
+        this.velocity.left= Math.min(maxV, this.velocity.left + dt * a)
     }
 
     onKeyDown(event) {

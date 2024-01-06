@@ -1,10 +1,13 @@
 import * as THREE from "three";
+import {Spherical, UniformsLib} from "three";
 import {SimplexNoise} from "three/addons";
 import {noise} from "./perlin";
 import {getRandomInt} from "../Shared/utils";
-import {Spherical} from "three";
 import {Tree} from "../Shared/Objects/Tree";
 import {FlatRock, LumpyRock, NormalRock} from "../Level1/Rock";
+import {mergeUniforms} from "three/src/renderers/shaders/UniformsUtils";
+import {CustomShadowMaterial} from "./CustomShadownMaterial";
+import {uniform} from "three/nodes";
 
 export class WorldTerrain{
     material;
@@ -34,21 +37,19 @@ export class WorldTerrain{
 
         this.world.verticesNeedUpdate = true;
 
-        this.material = new THREE.ShaderMaterial({
-            uniforms: {
-                sphereOrigin: { value: new THREE.Vector3(0, 0, 0) }, // Set the sphere's origin
-                time: {value: 0},
-                fogColor : { value: new THREE.Vector3(1, 1, 1) },
-                fogNear : { value: 100.0 },
-                fogFar : { value: 1000.0 },
-                fogNoiseSpeed: {value: 0.1},
-                fogNoiseFrequency: {value: 0.003},
-                fogNoiseImpact: {value: 0.5},
-                fogDensity: {value: 0.0006}
-            },
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader,
-        });
+        let uniforms = {
+            sphereOrigin: { value: new THREE.Vector3(0, 0, 0) }, // Set the sphere's origin
+            time: {value: 0},
+            fogColor : { value: new THREE.Vector3(1, 1, 1) },
+            fogNear : { value: 100.0 },
+            fogFar : { value: 1000.0 },
+            fogNoiseSpeed: {value: 0.1},
+            fogNoiseFrequency: {value: 0.003},
+            fogNoiseImpact: {value: 0.5},
+            fogDensity: {value: 0.0006},
+        }
+
+        this.material = CustomShadowMaterial(terrainShader, uniforms)
 
         this.mesh = new THREE.Mesh(this.world, this.material);
         this.mesh.receiveShadow = true
@@ -114,17 +115,7 @@ export class WorldTerrain{
     }
 }
 
-
-const vertexShader = `
-  varying vec3 vPosition;
-
-  void main() {
-    vPosition = position;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const fragmentShader = `
+const terrainShader = `
     ${noise}
     uniform vec3 sphereOrigin;
     uniform vec3 fogColor;
@@ -157,9 +148,8 @@ const fragmentShader = `
         return vec3(r / 255.0, g / 255.0, b / 255.0);
     }
 
-
-    void main() {
-        float distance = length(vPosition - sphereOrigin);
+    vec3 getColour(){
+              float distance = length(vPosition - sphereOrigin);
         float cameraDistance = length(vPosition - cameraPosition);
         
         vec3 windDir = vec3(0.0, 0.0, time);
@@ -186,8 +176,9 @@ const fragmentShader = `
         colour = mix(colour, snowColour, tSoil);
 
         // Apply fog color
-        vec3 foggedColor = mix(colour, fogColor, fogFactor);
-
-        gl_FragColor = vec4(foggedColor, 1.0);
+        return mix(colour, fogColor, fogFactor);
     }
 `;
+
+
+

@@ -1,8 +1,8 @@
 import {Scene} from "./Scene";
 import {WorldTerrain} from "../Level1/WorldTerrain";
-import {DUSTY_EVENING_SKY, MORNING_SKY, Sky} from "./Objects/Sky";
+import {DUSTY_EVENING_SKY, MORNING_SKY, Sky} from "./Sky";
 import {WaterSphere} from "../Level2/WaterSphere";
-import {Lights} from "./Objects/Lights";
+import {Lights} from "./Lights";
 import {House} from "../Level1/House";
 import {LumpyRock} from "../Level1/Rock";
 import {Grass} from "../Level1/Grass";
@@ -10,30 +10,31 @@ import {Grass} from "../Level1/Grass";
 
 
 
-// const world = new WorldTerrain()
-// new Scene([
-//     world,
-//     new Sky(MIDDAY_SKY),
-//     ...world.getRandomTrees(0.03),
-//     ...world.getRandomRocks(0.3),
-//     new WaterSphere(),
-//     new Lights()
-//
-// ], 5300, 150).display()
+const world = new WT2()
+let s1 = new Scene([
+     world,
+     new Sky(DUSTY_EVENING_SKY),
+     ...world.getRandomTrees(0.01),
+     //...world.getRandomRocks(0.3),
+     new WaterSphere(),
+     new Lights()
 
-const scene1World = new WorldTerrain()
+ ], -5300, 300)
 
-new Scene([
+const scene1World = new WT1()
+
+let s2 = new Scene([
     scene1World,
-    //new Grass(),
     ...scene1World.getRandomTrees(0.003),
     //...scene1World.getRandomRocks(0.3),
+    new Grass(),
     new Sky(DUSTY_EVENING_SKY),
     new Lights(),
-    new House(),
-    //new LumpyRock(1, 1, 2)
+    new House()
 
-], 200, 50).display()
+], 200, 50)
+
+s1.display()
 
 
 

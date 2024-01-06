@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import {FirstPersonControls} from "three/addons/controls/FirstPersonControls";
 import {Renderer} from "./Renderer";
+import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import {FlyControls} from "three/addons";
 
 export class Scene{
     movementAllowed;
@@ -20,9 +22,9 @@ export class Scene{
         this.camera.position.set(0, 0, cameraStart)
         this.camera.rotateZ(Math.PI*2)
         if (this.movementAllowed){
-            this.controls = new FirstPersonControls(this.camera, Renderer.instance.renderer.domElement);
+            this.controls = new FlyControls(this.camera, Renderer.instance.renderer.domElement);
             this.controls.movementSpeed = movementSpeed;
-            this.controls.lookSpeed = 0.1;
+            this.controls.rollSpeed = 0.5;
         }
 
         //start loading

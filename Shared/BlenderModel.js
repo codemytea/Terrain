@@ -4,13 +4,18 @@ export class BlenderModel{
     obj;
     filename;
 
-    constructor(r, theta, phi, scale, filename, negativeAdjustment) {
+    constructor(r, theta, phi, scale, filename, negativeAdjustment, isCircular) {
         this.filename = filename
-        this.obj = this.init(r, theta, phi, scale, negativeAdjustment)
+        if (isCircular){
+            this.obj = this.circularInit(r, theta, phi, scale, negativeAdjustment)
+        } else {
+            this.obj = this.planarInit(theta, phi, negativeAdjustment, scale)
+        }
+
     }
 
 
-    async init(r, theta, phi, scale, negativeAdjustment){
+    async circularInit(r, theta, phi, scale, negativeAdjustment){
         const gltf = await BlenderModel.loadModel(this.filename)
         let model = gltf.clone()
         model.position.setFromSphericalCoords(r - negativeAdjustment, phi, theta)
@@ -18,6 +23,18 @@ export class BlenderModel{
 
         model.lookAt(0, 0, 0)
         model.rotateX(Math.PI*1.5)
+
+        model.castShadow = true
+        model.receiveShadow = true
+
+        return model;
+    }
+
+    async planarInit(x, y, z, scale){
+        const gltf = await BlenderModel.loadModel(this.filename)
+        let model = gltf.clone()
+        model.position.set(x, y, z)
+        model.scale.set(scale, scale, scale)
 
         model.castShadow = true
         model.receiveShadow = true

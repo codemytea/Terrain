@@ -24,11 +24,11 @@ import {Grass} from "../Level1/Grass";
 const scene1World = new WorldTerrain()
 
 new Scene([
-    //scene1World,
+    scene1World,
     new Grass(),
     new Sky(DUSTY_EVENING_SKY),
     new Lights(),
-    //new House(0, 0),
+    new House(0, 0),
     //new LumpyRock(1, 1, 2)
 
 ], 200, 50).display()

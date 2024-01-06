@@ -8,10 +8,30 @@ export class WorldTerrain{
     world
 
     constructor() {
-        this.world = new THREE.PlaneGeometry(100, 100, 50, 50)
-        this.world.rotateX(-Math.PI/2)
-        //add soil texture to it
-        this.mesh = new THREE.Mesh(this.world, new THREE.MeshBasicMaterial())
+        this.mesh = this.init()
+    }
+
+    init(){
+        return new Promise((r) => {
+            this.world = new THREE.PlaneGeometry(100, 100, 50, 50)
+            this.world.rotateX(-Math.PI/2)
+
+            let loader = new THREE.TextureLoader();
+
+            loader.load('../grass.png', (t)=> {
+                t.wrapS = THREE.RepeatWrapping
+                t.wrapT = THREE.RepeatWrapping
+                t.repeat.set(10, 10)
+
+                let mesh = new THREE.Mesh(world, new THREE.MeshStandardMaterial({map: t}));
+                // mesh.receiveShadow = true
+                // mesh.castShadow = true
+                // mesh.position.set(0, 0, 0)
+                r(mesh)
+
+            })
+        })
+
     }
 
     getRandomTrees(density){
@@ -53,7 +73,11 @@ export class WorldTerrain{
 
 
     add(scene){
-        scene.add(this.mesh)
+
+        this.mesh.then((r)=> {
+            scene.add(r)
+        })
+
         const houseLight = new THREE.PointLight(0xffffff, 200)
         houseLight.position.set(0, 2, 0)
         houseLight.power = 1000
@@ -61,5 +85,7 @@ export class WorldTerrain{
     }
 
 }
+
+
 
 

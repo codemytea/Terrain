@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {fragShader, vertexShader} from "./GrassShaders";
-import {getRandomFloat} from "../Shared/utils";
+import {getRandomFloat, getRandomXYZAvoiding} from "../Shared/utils";
 
 export class Grass{
     grassMesh;
@@ -28,8 +28,9 @@ export class Grass{
         const colors = [];
 
         for (let i = 0; i < 1000000; i++) {
+            const vec = getRandomXYZAvoiding(90, 45, [40, 60])
 
-            const pos = new THREE.Vector3(getRandomFloat(50, 100), 0, getRandomFloat(50, 100));
+            const pos = new THREE.Vector3(vec[0], vec[1], vec[2]);
 
             const uv = [
                 this.convertRange(pos.x, -50, 50, 0, 1),

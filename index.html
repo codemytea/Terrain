@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Grandiflora+One&display=swap" rel="stylesheet">
-    <title>Main Menu</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
 
-        #menu {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <title>Terrain</title>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Grandiflora+One&display=swap" rel="stylesheet">
+    </head>
 
-        #start-button {
-            font-size: 24px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-<div id="menu" style="font-family: 'Grandiflora One', cursive;">
-    <h1>Controls</h1>
-    <p>Use cursor to look around</p>
-    <p>Use arrow keys or click to move</p>
-    <button id="start-button" style="font-family: 'Grandiflora One', cursive; padding-left: 70px; padding-right: 70px">Start</button>
-</div>
-<script type="module" src="menu.js"></script>
-</body>
+    <body>
+        <div id="menu" style="font-family: 'Grandiflora One', cursive;">
+            <h1>Controls</h1>
+            <p>Use cursor to look around</p>
+            <p>Use arrow keys or click to move</p>
+            <button id="start-button" style="font-family: 'Grandiflora One', cursive; padding-left: 70px; padding-right: 70px">
+                Start
+            </button>
+        </div>
+
+        <div id="gameplayContent">
+            <div id="hud" class="hud">
+                <div class="hud-content">
+                    <p>Goal:<br>Plant 10 trees<br><br></p>
+                    <div id="progressBar"><div id="progressBarValue"></div></div>
+                </div>
+            </div>
+            <div class="overlay top">Use your arrow keys to move</div>
+            <div class="overlay bottom">
+                <p id="bottomMessage">Welcome to your cottage. Press P to plant trees.</p>
+            </div>
+            <div id="wellDoneMessage">Well Done! Press Enter to go to the forest.</div>
+        </div>
+
+        <script type="module" charset="UTF-8" src="main.js"></script>
+    </body>
+
 </html>

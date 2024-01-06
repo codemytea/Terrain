@@ -81,9 +81,9 @@ export class Sky{
         Renderer.instance.renderer.toneMappingExposure = skyParams.exposure;
     }
 
-    onNewFrame(delta){
-        //this.sky.material.uniforms.time.value += delta;
-    }
+    // onNewFrame(delta){
+    //     //this.sky.material.uniforms.time.value += delta;
+    // }
 
 
 }

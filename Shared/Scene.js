@@ -4,6 +4,7 @@ import {Renderer} from "./Renderer";
 
 export class Scene{
     movementAllowed;
+    startTime = Date.now();
 
     constructor(objects, cameraStart, movementSpeed, movementAllowed = true) {
         this.movementAllowed = movementAllowed
@@ -34,18 +35,18 @@ export class Scene{
     }
 
     display(){
+
         const clock = new THREE.Clock()
         const loop = ()=>{
             requestAnimationFrame(loop);
-            const d = clock.getDelta()
             if (this.movementAllowed){
-                this.controls.update(d);
+                this.controls.update(clock.getDelta());
             }
 
 
             this.objects.forEach((o)=>{
                 if(!!o.onNewFrame){
-                    o.onNewFrame(d)
+                    o.onNewFrame(Date.now() - this.startTime)
                 }
             })
 

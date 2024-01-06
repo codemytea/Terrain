@@ -15,7 +15,7 @@ export class Scene{
 
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x87CEEB);
-        this.scene.fog = new THREE.Fog(0xffffff, 0.01, 2500);
+        this.scene.fog = new THREE.Fog(0xffffff, 0.1, 200);
 
 
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);

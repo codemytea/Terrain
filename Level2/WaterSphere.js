@@ -12,22 +12,22 @@ export class WaterSphere{
 
         this.cubeCamera = new THREE.CubeCamera(0.1, 1000, cubeRenderTarget)
 
-        const world = new THREE.SphereGeometry(4945, 1000, 1000);
+        const world = new THREE.SphereGeometry(990, 300, 300);
 
         const vertexPositions = world.getAttribute('position').array;
         const vertexNormals = world.getAttribute('normal').array;
 
         const simplex = new SimplexNoise();
-        let temp = getRandomInt(50, 60);
+        let temp = getRandomInt(10, 20);
 
 
         for (let i = 0; i < vertexPositions.length; i += 3) {
 
             let relativeVertexPosition = simplex.noise3d(vertexPositions[i]/temp, vertexPositions[i+1]/temp, vertexPositions[i+2]/temp);
             // Extend the vertex along its normal
-            vertexPositions[i] += vertexNormals[i] * relativeVertexPosition *10;
-            vertexPositions[i + 1] += vertexNormals[i + 1] * relativeVertexPosition*10 ;
-            vertexPositions[i + 2] += vertexNormals[i + 2] * relativeVertexPosition*10 ;
+            vertexPositions[i] += vertexNormals[i] * relativeVertexPosition *5;
+            vertexPositions[i + 1] += vertexNormals[i + 1] * relativeVertexPosition*5 ;
+            vertexPositions[i + 2] += vertexNormals[i + 2] * relativeVertexPosition*5;
         }
 
         world.verticesNeedUpdate = true;

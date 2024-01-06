@@ -29,17 +29,17 @@ let level2 = new Scene(
     [
     fullWorld,
      new Sky(DUSTY_EVENING_SKY),
-     ...fullWorld.getRandomTrees(0.01),
+     ...fullWorld.getRandomTrees(0.1),
      new WaterSphere(),
      new Lights()
     ],
-    [0, 0,-5300],
+    [0, 0, 1300],
     300
 )
 
 
 
-level1.display()
+level2.display()
 
 
 

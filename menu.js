@@ -4,7 +4,7 @@ import {MORNING_SKY, Sky} from './Shared/Objects/Sky.js'
 
 new Scene([
     new Sky(MORNING_SKY),
-], 5300, 0, false).display()
+], [0, 0, 5300], 0, false).display()
 
 document.addEventListener('DOMContentLoaded', function () {
     const startButton = document.getElementById('start-button');

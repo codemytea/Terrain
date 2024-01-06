@@ -13,22 +13,22 @@ export class WorldTerrain{
     world;
 
     constructor() {
-        this.r = 5000
-        this.world = new THREE.SphereGeometry(this.r, 600, 600);
+        this.r = 1000
+        this.world = new THREE.SphereGeometry(this.r, 250, 250);
         const vertexPositions = this.world.getAttribute('position').array;
         const vertexNormals = this.world.getAttribute('normal').array;
 
         const simplex = new SimplexNoise();
-        let temp = getRandomInt(500, 600)
+        let temp = getRandomInt(100, 150)
 
 
         for (let i = 0; i < vertexPositions.length; i += 3) {
 
             let relativeVertexPosition = simplex.noise3d(vertexPositions[i]/temp, vertexPositions[i+1]/temp, vertexPositions[i+2]/temp);
             // Extend the vertex along its normal
-            vertexPositions[i] += vertexNormals[i] * relativeVertexPosition * 150;
-            vertexPositions[i + 1] += vertexNormals[i + 1] * relativeVertexPosition * 150;
-            vertexPositions[i + 2] += vertexNormals[i + 2] * relativeVertexPosition * 150;
+            vertexPositions[i] += vertexNormals[i] * relativeVertexPosition * 30;
+            vertexPositions[i + 1] += vertexNormals[i + 1] * relativeVertexPosition * 30;
+            vertexPositions[i + 2] += vertexNormals[i + 2] * relativeVertexPosition * 30;
             
         }
 
@@ -38,12 +38,12 @@ export class WorldTerrain{
             sphereOrigin: { value: new THREE.Vector3(0, 0, 0) }, // Set the sphere's origin
             time: {value: 0},
             fogColor : { value: new THREE.Vector3(1, 1, 1) },
-            fogNear : { value: 100.0 },
-            fogFar : { value: 1000.0 },
-            fogNoiseSpeed: {value: 0.1},
-            fogNoiseFrequency: {value: 0.003},
-            fogNoiseImpact: {value: 0.5},
-            fogDensity: {value: 0.0006},
+            fogNear : { value: 10.0 },
+            fogFar : { value: 100.0 },
+            fogNoiseSpeed: {value: 0.00003},
+            fogNoiseFrequency: {value: 0.03},
+            fogNoiseImpact: {value: 0.6},
+            fogDensity: {value: 0.006},
         }
 
         this.material = CustomShadowMaterial(terrainShader, uniforms)
@@ -75,13 +75,13 @@ export class WorldTerrain{
     }
 
     getRandomTrees(treesPerPosition){
-        let positions = this.getPositions(10, 200)
+        let positions = this.getPositions(10, 50)
         let numberOfTrees = positions.length * treesPerPosition
         let trees = []
         for(let i = 0; i<Math.min(numberOfTrees, positions.length); i++){
             let randIndex = getRandomInt(0, positions.length - 1)
             let randPos = positions[randIndex]
-            trees.push(new WorldTree(randPos.radius, randPos.theta, randPos.phi, getRandomInt(3, 20)))
+            trees.push(new WorldTree(randPos.radius, randPos.theta, randPos.phi))
             positions.splice(randIndex, 1)
         }
         return trees
@@ -104,20 +104,20 @@ const terrainShader = `
     
     varying vec3 vPosition;
 
-    const float minRiverDistance = 4800.0;
-    const float maxRiverDistance = 4949.0;
+    const float minRiverDistance = 800.0;
+    const float maxRiverDistance = 990.0;
     
-    const float minSiltDistance = 4949.0;
-    const float maxSiltDistance = 4950.0;
+    const float minSiltDistance = 990.0;
+    const float maxSiltDistance = 1000.0;
     
-    const float minMossDistance = 4950.0;
-    const float maxMossDistance = 5030.0;
+    const float minMossDistance = 1000.0;
+    const float maxMossDistance = 1010.0;
     
-    const float minSoilDistance = 5030.0;
-    const float maxSoilDistance = 5200.0;
+    const float minSoilDistance = 1010.0;
+    const float maxSoilDistance = 1050.0;
     
-    const float minSnowDistance = 5200.0;
-    const float maxSnowDistance = 6000.0;
+    const float minSnowDistance = 1050.0;
+    const float maxSnowDistance = 2000.0;
     
     vec3 hexToVec3(float r, float g, float b) {
         return vec3(r / 255.0, g / 255.0, b / 255.0);

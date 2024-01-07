@@ -2,45 +2,37 @@ export const fragShader = `
     uniform sampler2D texture1;
     uniform sampler2D textures[4];
     
-    varying vec2 vUv;
-    varying vec2 cloudUV;
+    varying vec2 textureColour;
+    varying vec2 fakeClouds;
     
-    void main() {
-      float contrast = 1.5;
-      float brightness = 0.1;
-      vec3 color = texture2D(textures[0], vUv).rgb * contrast + vec3(brightness);
-      color = mix(color, texture2D(textures[1], cloudUV).rgb, 0.4);
-      gl_FragColor = vec4(color, 1.0);
+    float exposure = 1.5;
+    float luminosity = 0.1;
+    float fakeCloudDensity = 0.4;
+    
+    void main() {   
+        vec3 color = texture2D(textures[0], textureColour).rgb * exposure + vec3(luminosity);
+        color = mix(color, texture2D(textures[1], fakeClouds).rgb, fakeCloudDensity);
+        gl_FragColor = vec4(color, 1.0);
     }
 `;
 
 export const vertexShader = `
-    varying vec2 vUv;
-    varying vec2 cloudUV;
+    varying vec2 textureColour;
+    varying vec2 fakeClouds;
     
-    uniform float iTime;
+    uniform float delta;
     
     void main() {
-      vUv = uv;
-      cloudUV = uv;
-      
-      float waveSize = 10.0;
-      float tipDistance = 0.3;
-      float centerDistance = 0.1;
-      
-      vec3 cpos = position;
-      
-      if (color.x > 0.6) {
-        cpos.x += sin((iTime / 500.0) + (uv.x * waveSize)) * tipDistance;
-      } else if (color.x > 0.0) {
-        cpos.x += sin((iTime / 500.0) + (uv.x * waveSize)) * centerDistance;
-      }
-      
-      float diff = position.x - cpos.x;
-      cloudUV.x += iTime / 20000.0;
-      cloudUV.y += iTime / 10000.0;
-      
-      vec4 mvPosition = modelViewMatrix * vec4(cpos, 1.0);
-      gl_Position = projectionMatrix * mvPosition;
+        textureColour = uv;
+        fakeClouds = uv;
+        vec3 temp = position; 
+        
+        float rippleEffect = 600.0;
+        
+        fakeClouds.x += delta / (rippleEffect*30.0);
+        fakeClouds.y += delta / (rippleEffect*20.0);
+        
+        vec4 mvPosition = modelViewMatrix * vec4(temp, 1.0);
+        gl_Position = projectionMatrix * mvPosition;
     }
 `;

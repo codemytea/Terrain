@@ -1,7 +1,5 @@
 import * as THREE from "three";
-import {FirstPersonControls} from "three/addons/controls/FirstPersonControls";
 import {Renderer} from "./Renderer";
-import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {FlyControls} from "three/addons";
 
 export class Scene{

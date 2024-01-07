@@ -12,7 +12,7 @@ export class Grass{
         grassMaterial: new THREE.ShaderMaterial({
             uniforms: {
                 textures: {value: [ new THREE.TextureLoader().load('../Assets/grass.png')]},
-                iTime: { type: 'f', value: 0.0 }
+                delta: { type: 'f', value: 0.0 }
             },
             vertexShader: vertexShader,
             fragmentShader: fragShader,
@@ -23,44 +23,44 @@ export class Grass{
     constructor() {
 
         const positions = [];
-        const uvs = [];
+        const textureColours = [];
         const indices = [];
-        const colors = [];
+        const colours = [];
 
         for (let i = 0; i < 1000000; i++) {
-            const vec = getRandomXYZAvoiding(100, 50, [38, 62])
+            const vector = getRandomXYZAvoiding(100, 50, [38, 62])
 
-            const pos = new THREE.Vector3(vec[0], vec[1], vec[2]);
+            const position = new THREE.Vector3(vector[0], vector[1], vector[2]);
+
+            const convertRange  = (val, oldMin, oldMax, newMin, newMax) => (((val - oldMin) * (newMax - newMin)) / (oldMax - oldMin)) + newMin;
 
             const uv = [
-                this.convertRange(pos.x, -50, 50, 0, 1),
-                this.convertRange(pos.z, -50, 50, 0, 1)
+                convertRange(position.x, -50, 50, 0, 1),
+                convertRange(position.z, -50, 50, 0, 1)
             ]
 
-            const blade = this.generateBlade(pos, i * 5, uv);
+            const blade = this.createBlade(position, i * 5, uv);
 
-            positions.push(...blade.verts.flatMap(vert => vert.pos));
-            uvs.push(...blade.verts.flatMap(vert => vert.uv));
-            colors.push(...blade.verts.flatMap(vert => vert.color));
+            positions.push(...blade.verts.flatMap(vert => vert.position));
+            textureColours.push(...blade.verts.flatMap(vert => vert.uv));
+            colours.push(...blade.verts.flatMap(vert => vert.color));
             indices.push(...blade.indices);
         }
 
-        const geom = new THREE.BufferGeometry();
-        geom.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
-        geom.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
-        geom.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colors), 3));
-        geom.setIndex(indices);
-        geom.computeVertexNormals();
+        const grassyPlane = new THREE.BufferGeometry();
+        grassyPlane.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
+        grassyPlane.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(textureColours), 2));
+        grassyPlane.setAttribute('color', new THREE.BufferAttribute(new Float32Array(colours), 3));
+        grassyPlane.setIndex(indices);
+        grassyPlane.computeVertexNormals();
 
-        this.grassMesh = new THREE.Mesh(geom, this.grassProperties.grassMaterial);
+        this.grassMesh = new THREE.Mesh(grassyPlane, this.grassProperties.grassMaterial);
 
     }
 
-    generateBlade(center, vArrOffset, uv) {
+    createBlade(center, offsets, uv) {
         const { grassWidth, grassHeight, heightVariation } = this.grassProperties;
-
-        const midpoint = grassWidth * 0.5;
-
+        
         const height = grassHeight + Math.random() * heightVariation;
         const tipBend = Math.random() * Math.PI * 2;
 
@@ -68,52 +68,48 @@ export class Grass{
 
         const verts = [
             {
-                pos: center.clone().addScaledVector(getYawUnitVector(), grassWidth / 2).toArray(),
+                position: center.clone().addScaledVector(getYawUnitVector(), grassWidth / 2).toArray(),
                 uv,
                 color: [0, 0, 0]
             },
             {
-                pos: center.clone().addScaledVector(getYawUnitVector(), -(grassWidth / 2)).toArray(),
+                position: center.clone().addScaledVector(getYawUnitVector(), -(grassWidth / 2)).toArray(),
                 uv,
                 color: [0, 0, 0]
             },
             {
-                pos: center.clone().addScaledVector(getYawUnitVector(), -(midpoint / 2)).add(new THREE.Vector3(0, height / 2, 0))   .toArray(),
+                position: center.clone().addScaledVector(getYawUnitVector(), -(grassWidth * 0.5 / 2)).add(new THREE.Vector3(0, height / 2, 0)).toArray(),
                 uv,
                 color: [0.5, 0.5, 0.5]
             },
             {
-                pos: center.clone().addScaledVector(getYawUnitVector(), midpoint / 2).add(new THREE.Vector3(0, height / 2, 0)).toArray(),
+                position: center.clone().addScaledVector(getYawUnitVector(), grassWidth * 0.5 / 2).add(new THREE.Vector3(0, height / 2, 0)).toArray(),
                 uv,
                 color: [0.5, 0.5, 0.5]
             },
             {
-                pos: center.clone().addScaledVector(new THREE.Vector3(Math.sin(tipBend), 0, -Math.cos(tipBend)), 0.1).add(new THREE.Vector3(0, height, 0)).toArray(),
+                position: center.clone().addScaledVector(new THREE.Vector3(Math.sin(tipBend), 0, -Math.cos(tipBend)), 0.1).add(new THREE.Vector3(0, height, 0)).toArray(),
                 uv,
                 color: [1.0, 1.0, 1.0]
             }
         ];
 
         const indices = [
-            vArrOffset, vArrOffset + 1, vArrOffset + 2,
-            vArrOffset + 2, vArrOffset + 4, vArrOffset + 3,
-            vArrOffset + 3, vArrOffset, vArrOffset + 2
+            offsets, offsets + 1, offsets + 2,
+            offsets + 2, offsets + 4, offsets + 3,
+            offsets + 3, offsets, offsets + 2
         ];
 
         return { verts, indices };
     }
-
-
-    convertRange (val, oldMin, oldMax, newMin, newMax) {
-        return (((val - oldMin) * (newMax - newMin)) / (oldMax - oldMin)) + newMin;
-    }
+    
 
     add(scene){
         scene.add(this.grassMesh)
     }
 
     onNewFrame(delta){
-        this.grassProperties.grassMaterial.uniforms.iTime.value = delta;
+        this.grassProperties.grassMaterial.uniforms.delta.value = delta;
     }
 
 }

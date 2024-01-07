@@ -1,15 +1,17 @@
-import * as THREE from "three";
-import {Spherical} from "three";
-import {SimplexNoise} from "three/addons";
-import {noise} from "./perlin";
-import {getRandomInt} from "../Shared/utils";
-import {WorldTree} from "../Shared/Objects/Tree";
-import {CustomShadowMaterial} from "./CustomShadowMaterial";
+import * as THREE from "../External Libraries/three/three.module.js";
+import {SimplexNoise} from "../External Libraries/three/Addons/SimplexNoise";
+import {noise} from "./perlin.js";
+import {getRandomInt} from "../Shared/utils.js";
+import {CustomShadowMaterial} from "./CustomShadowMaterial.js";
+import {InstancedSphericalModel} from "../Shared/Models/InstancedSphericalModel.js";
 
-export class WorldTerrain{
+/**
+ * The WorldTerrain class represents the terrain of Level 2
+ */
+export class WorldTerrain {
     material;
     mesh;
-    r;
+    r; //radius
     world;
 
     constructor() {
@@ -24,22 +26,22 @@ export class WorldTerrain{
 
         for (let i = 0; i < vertexPositions.length; i += 3) {
 
-            let relativeVertexPosition = simplex.noise3d(vertexPositions[i]/temp, vertexPositions[i+1]/temp, vertexPositions[i+2]/temp);
+            let relativeVertexPosition = simplex.noise3d(vertexPositions[i] / temp, vertexPositions[i + 1] / temp, vertexPositions[i + 2] / temp);
             // Extend the vertex along its normal
             vertexPositions[i] += vertexNormals[i] * relativeVertexPosition * 30;
             vertexPositions[i + 1] += vertexNormals[i + 1] * relativeVertexPosition * 30;
             vertexPositions[i + 2] += vertexNormals[i + 2] * relativeVertexPosition * 30;
-            
+
         }
 
         this.world.verticesNeedUpdate = true;
 
         let uniforms = {
-            sphereOrigin: { value: new THREE.Vector3(0, 0, 0) }, // Set the sphere's origin
+            sphereOrigin: {value: new THREE.Vector3(0, 0, 0)}, // Set the sphere's origin
             time: {value: 0},
-            fogColor : { value: new THREE.Vector3(1, 1, 1) },
-            fogNear : { value: 10.0 },
-            fogFar : { value: 300.0 },
+            fogColor: {value: new THREE.Vector3(1, 1, 1)},
+            fogNear: {value: 10.0},
+            fogFar: {value: 300.0},
             fogNoiseSpeed: {value: 0.00007},
             fogNoiseFrequency: {value: 0.03},
             fogNoiseImpact: {value: 0.6},
@@ -54,40 +56,58 @@ export class WorldTerrain{
         this.mesh.position.set(0, 0, 0)
     }
 
-    onNewFrame(delta){
+    /**
+     * Updates the time value for fog movement on each frame.
+     * @param {number} delta - The time difference
+     */
+    onNewFrame(delta) {
         this.material.uniforms.time.value += delta;
     }
 
-    add(scene){
+    /**
+     * Adds the world terrain mesh to the specified scene.
+     * @param {THREE.Scene} scene - The scene to which the world terrain mesh is added.
+     */
+    add(scene) {
         scene.add(this.mesh);
     }
-    
-    getPositions(minHeight, maxHeight){
+
+    /**
+     * Retrieves spherical positions of vertices within a specified height range. Used when calculating where the trees
+     * could grow
+     * @param {number} minHeight - The minimum height for vertex positions.
+     * @param {number} maxHeight - The maximum height for vertex positions.
+     * @returns {THREE.Spherical[]} - An array of spherical positions.
+     */
+    getPositions(minHeight, maxHeight) {
         const vertexPositions = this.world.attributes.position;
         let sphericalPositions = []
-        for (let i = 0; i < vertexPositions.count; i ++) {
+        for (let i = 0; i < vertexPositions.count; i++) {
             let vertex = new THREE.Vector3().fromBufferAttribute(vertexPositions, i)
             sphericalPositions.push(
-                new Spherical().setFromCartesianCoords(vertex.x, vertex.y, vertex.z)
+                new THREE.Spherical().setFromCartesianCoords(vertex.x, vertex.y, vertex.z)
             )
         }
-        return sphericalPositions.filter((pos)=> pos.radius - this.r > minHeight && pos.radius - this.r < maxHeight)
+        return sphericalPositions.filter((pos) => pos.radius - this.r > minHeight && pos.radius - this.r < maxHeight)
     }
 
-    getRandomTrees(treesPerPosition){
+    /**
+     * Generates an array of tree instances at random positions within a specified height range.
+     * @param {number} treesPerPosition - The number of trees to generate per valid position.
+     * @returns An array of trees.
+     */
+    getRandomTrees(treesPerPosition) {
         let positions = this.getPositions(10, 50)
         let numberOfTrees = positions.length * treesPerPosition
         let trees = []
-        for(let i = 0; i<Math.min(numberOfTrees, positions.length); i++){
+        for (let i = 0; i < Math.min(numberOfTrees, positions.length); i++) {
             let randIndex = getRandomInt(0, positions.length - 1)
             let randPos = positions[randIndex]
-            trees.push(new WorldTree(randPos.radius, randPos.theta, randPos.phi))
+            trees.push({radius: randPos.radius, theta: randPos.theta, phi: randPos.phi, scale: getRandomInt(2, 3)})
             positions.splice(randIndex, 1)
         }
-        return trees
-
+        return new InstancedSphericalModel("../../Assets/lowPolyTree.glb", 5, trees)
     }
-
 }
 
 const terrainShader = `

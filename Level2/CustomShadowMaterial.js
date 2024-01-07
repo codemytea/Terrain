@@ -1,8 +1,7 @@
 //https://gist.github.com/wmcmurray/6696fc95f25bbd2401d72a74e9493261
 
-import * as THREE from "three";
+import * as THREE from "../External Libraries/three/three.module.js";
 import {mergeUniforms} from "three/src/renderers/shaders/UniformsUtils";
-import {UniformsLib} from "three";
 
 const vertexShader = `
     varying vec3 vPosition;
@@ -46,8 +45,8 @@ export const CustomShadowMaterial = (myFragmentShader, uniforms)=>{
     return new THREE.ShaderMaterial({
         uniforms:
             mergeUniforms([
-                UniformsLib.lights,
-                UniformsLib.fog,
+                THREE.UniformsLib.lights,
+                THREE.UniformsLib.fog,
                 uniforms
             ]),
         vertexShader: vertexShader,

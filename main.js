@@ -11,7 +11,19 @@ import * as THREE from "three";
 
 /*************************START PAGE****************************/
 
-const stream = './Assets/ambientNoise.wav';
+function ambientSound(filename, volume){
+    const sound = new Audio(filename)
+    sound.play()
+    sound.volume = volume
+    sound.addEventListener('ended', ()=>ambientSound(filename, volume))
+    return sound
+}
+
+function stopSound(audio){
+    audio.pause()
+}
+
+let toStopSound;
 
 let menu = new Scene([
     new Sky(MORNING_SKY),
@@ -35,11 +47,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('goal').innerText = 'Plant 10 trees'
         level1.display()
 
-        audioLoader.load(stream, function(buffer) {
-            audio.setBuffer(buffer);
-            audio.setLoop(true);
-            audio.play();
-        });
+        toStopSound = ambientSound('./Assets/ambientNoise.wav', 0.4)
+        ambientSound('./Assets/wind.wav', 0.1)
     });
 });
 
@@ -87,6 +96,8 @@ function handleKeyPress(event) {
         document.getElementById('goal').innerText = 'Collect 5 pine tree seeds'
         document.getElementById('progressBarValue').style.width = 0 + '%';
         document.getElementById('bottomMessage').innerText = 'Location: Forest. Press S to collect seeds';
+        stopSound(toStopSound);
+        ambientSound('./Assets/forestAmbience.wav', 0.4)
         level2.display()
     }
 }
@@ -159,6 +170,13 @@ updateHUDSeeds();
  *
  * stop being able to move off scene or into model in level 1.
  *
+ * sky??? either put camera on top of world or moving sky
+ *
+ * water not reflecting!!!
+ *
+ *
+ * shadows on l1
+ *
  * check blender
  *
  * comment
@@ -169,7 +187,5 @@ updateHUDSeeds();
  * check reqs again
  *
  * deal with rocks exporting too high res
- *
- * deal with jerky - isaacs mesh?
  *
  * */

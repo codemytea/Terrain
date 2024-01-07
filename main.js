@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('menu').style.display = 'none'
         document.getElementById('gameplayContent').style.display = 'block'
-        level2.display()
+        level1.display()
 
         audioLoader.load(stream, function(buffer) {
             audio.setBuffer(buffer);
@@ -116,6 +116,15 @@ let level2 = new Scene([
  * integrate with arrow controls
  *
  * stop being able to move off scene or into model in level 1.
+ *
+ * check blender
+ *
+ * comment
+ *
+ *
+ * report
+ *
+ * check reqs again
  *
  * deal with rocks exporting too high res
  *

@@ -2,8 +2,8 @@ import * as THREE from "three"
 import {Clock, Spherical} from "three"
 import {cameraPosition, sign} from "three/nodes";
 
-const maxV = 10
-const a = 20
+const maxV = 7
+const a = 15
 const g = 10
 
 
@@ -122,7 +122,7 @@ export class ArrowControls{
         let pos = this.camera.position
         let sphericalPos = new Spherical().setFromCartesianCoords(pos.x, pos.y, pos.z)
 
-        let newR = sphericalPos.radius + dr + 20
+        let newR = sphericalPos.radius + dr + 40
 
         this.camera.position.setFromSphericalCoords(newR, sphericalPos.phi, sphericalPos.theta)
 

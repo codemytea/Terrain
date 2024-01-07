@@ -95,7 +95,7 @@ a {
 }
 
 #wellDoneMessage {
-    display: none;
+    display: flex;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -105,6 +105,8 @@ a {
     padding: 20px;
     border-radius: 5px;
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 #menu {
@@ -114,6 +116,7 @@ a {
     transform: translate(-50%, -50%);
     text-align: center;
     display: none;
+    font-size: 20px;
 }
 
 #start-button {

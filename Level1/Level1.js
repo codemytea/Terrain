@@ -37,7 +37,7 @@ function updateHUD() {
 
     if (treesPlanted >= goal && !l1DisplayedBefore) {
         l1DisplayedBefore = true
-        document.getElementById('wellDoneMessage').innerText = 'Looks like your seed stock is getting low! Press Enter to go to the forest and collect some more.'
+        document.getElementById('wellDoneMessage').innerText = 'Looks like your seed stock is getting low!\nPress Enter to go to the forest and collect some more.'
         document.getElementById('wellDoneMessage').style.display = 'block';
     }
 }

@@ -5,7 +5,7 @@ import {ambientSound, toStopSound} from "./Shared/Sound.js";
 
 /*************************START PAGE****************************/
 
-
+document.getElementById('wellDoneMessage').style.display = 'none'
 
 let menu = new Scene([
     new Sky(menuSky),
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('gameplayContent').style.display = 'block'
         document.getElementById('progressMsg').style.display = 'none'
         document.getElementById('goal').innerText = 'Plant 10 trees'
-        document.getElementById('topInstructions').innerText = 'Use your arrow keys to move and your mouse to look around. Click the screen again if you press escape'
+        document.getElementById('topInstructions').innerText = '1) Click on the screen 2) use your arrow keys to move 3) use your mouse to look around \nIf you click outside the screen or press escape, click in the screen to start moving again'
         level1.display()
 
         toStopSound.value = ambientSound('./Assets/ambientNoise.wav', 0.4)

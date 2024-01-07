@@ -7,7 +7,8 @@ import {Renderer} from "./Renderer.js";
 export class Scene {
 
     /** The timestamp when the scene was initialized. */
-    startTime = Date.now();
+    clock = new THREE.Clock()
+    startTime = Date.now()
 
     /**
      * Constructs a Scene object with specified objects, camera parameters, movement speed, and optional settings.
@@ -45,15 +46,13 @@ export class Scene {
      * Displays the scene, updating controls and rendering on each frame.
      */
     display() {
-
-        const clock = new THREE.Clock()
         const loop = () => {
             requestAnimationFrame(loop);
 
 
             this.objects.forEach((o) => {
                 if (!!o.onNewFrame) {
-                    o.onNewFrame(Date.now() - this.startTime)
+                    o.onNewFrame(this.clock.getDelta(), this.startTime - Date.now())
                 }
             });
 

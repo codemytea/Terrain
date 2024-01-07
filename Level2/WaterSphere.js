@@ -74,9 +74,8 @@ export class WaterSphere {
 
     /**
      * Updates the cube camera for reflections on each frame.
-     * @param {number} delta - The time difference between frames.
      */
-    onNewFrame(delta) {
+    onNewFrame(deltaClock, deltaTime) {
         this.cubeCamera.update(Renderer.instance.renderer, this.scene);
     }
 }

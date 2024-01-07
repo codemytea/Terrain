@@ -133,7 +133,7 @@ export class Grass {
         scene.add(this.grassMesh)
     }
 
-    onNewFrame(delta) {
-        this.grassProperties.grassMaterial.uniforms.delta.value = delta;
+    onNewFrame(deltaClock, deltaTime) {
+        this.grassProperties.grassMaterial.uniforms.delta.value = deltaTime;
     }
 }

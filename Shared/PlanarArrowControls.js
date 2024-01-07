@@ -49,7 +49,6 @@ export class PlanarArrowControls {
 
     onNewFrame() {
 
-
         const dt = this.clock.getDelta()
         this.decelerate(dt)
 

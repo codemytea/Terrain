@@ -58,10 +58,9 @@ export class WorldTerrain {
 
     /**
      * Updates the time value for fog movement on each frame.
-     * @param {number} delta - The time difference
      */
-    onNewFrame(delta) {
-        this.material.uniforms.time.value += delta;
+    onNewFrame(deltaClock, deltaTime) {
+        this.material.uniforms.time.value += deltaClock*500000;
     }
 
     /**

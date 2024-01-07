@@ -39,11 +39,11 @@ export class WorldTerrain{
             time: {value: 0},
             fogColor : { value: new THREE.Vector3(1, 1, 1) },
             fogNear : { value: 10.0 },
-            fogFar : { value: 100.0 },
-            fogNoiseSpeed: {value: 0.00003},
+            fogFar : { value: 300.0 },
+            fogNoiseSpeed: {value: 0.00009},
             fogNoiseFrequency: {value: 0.03},
             fogNoiseImpact: {value: 0.6},
-            fogDensity: {value: 0.006},
+            fogDensity: {value: 0.004},
         }
 
         this.material = CustomShadowMaterial(terrainShader, uniforms)

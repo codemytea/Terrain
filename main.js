@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('menu').style.display = 'none'
         document.getElementById('gameplayContent').style.display = 'block'
+        document.getElementById('progressMsg').style.display = 'none'
+        document.getElementById('goal').innerText = 'Plant 10 trees'
         level1.display()
 
         audioLoader.load(stream, function(buffer) {
@@ -59,6 +61,7 @@ let level1 = new Scene([
 
 let treesPlanted = 0;
 const goal = 10;
+let l1DisplayedBefore = false
 
 
 function updateHUD() {
@@ -67,7 +70,9 @@ function updateHUD() {
 
     document.getElementById('progressBarValue').style.width = percentCompleted.toFixed(2) + '%';
 
-    if (treesPlanted >= goal) {
+    if (treesPlanted >= goal && !l1DisplayedBefore) {
+        l1DisplayedBefore = true
+        document.getElementById('wellDoneMessage').innerText = 'Looks like your seed stock is getting low! Press Enter to go to the forest and collect some more.'
         document.getElementById('wellDoneMessage').style.display = 'block';
     }
 }
@@ -79,8 +84,9 @@ function handleKeyPress(event) {
     }
     if ((event.key === 'Enter' || event.keyCode === 13) && treesPlanted >= goal){
         document.getElementById('wellDoneMessage').style.display = 'none'
-        document.getElementById('hud').style.display = 'none'
-        document.getElementById('bottomMessage').innerText = 'Location: Forest';
+        document.getElementById('goal').innerText = 'Collect 5 pine tree seeds'
+        document.getElementById('progressBarValue').style.width = 0 + '%';
+        document.getElementById('bottomMessage').innerText = 'Location: Forest. Press S to collect seeds';
         level2.display()
     }
 }
@@ -104,6 +110,42 @@ let level2 = new Scene([
     arrowControls
 
 ], arrowControls.camera, 300, false, true)
+
+
+let seedsCollected = 0;
+let goal2 = 5;
+let l2DisplayedBefore = false
+
+
+function updateHUDSeeds() {
+
+    const percentCompleted = (seedsCollected / goal2) * 100;
+
+    document.getElementById('progressBarValue').style.width = percentCompleted.toFixed(2) + '%';
+
+    if (seedsCollected >= goal2 && !l2DisplayedBefore) {
+        l2DisplayedBefore = true
+        document.getElementById('wellDoneMessage').innerText = 'You\'ve replenished your stock. Enjoy cruising.';
+        document.getElementById('wellDoneMessage').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('wellDoneMessage').style.display = 'none';
+            document.getElementById('hud').style.display = 'none';
+            document.getElementById('bottomMessage').innerText = 'Location: Forest.';
+        }, 2500)
+    }
+}
+
+function handleKeyPress2(event) {
+    if (event.key === 's' || event.key === 'S') {
+        seedsCollected++;
+        updateHUDSeeds();
+    }
+
+}
+
+document.addEventListener('keydown', handleKeyPress2);
+
+updateHUDSeeds();
 
 
 

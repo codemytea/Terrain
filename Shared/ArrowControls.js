@@ -2,8 +2,8 @@ import * as THREE from "three"
 import {Clock, Spherical} from "three"
 import {cameraPosition, sign} from "three/nodes";
 
-const maxV = 7
-const a = 15
+const maxV = 6
+const a = 11
 const g = 10
 
 

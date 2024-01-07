@@ -44,6 +44,9 @@ a {
     color: aliceblue;
     font-family: 'Grandiflora One', cursive;
     font-size: x-large;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .top {

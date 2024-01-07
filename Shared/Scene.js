@@ -16,7 +16,7 @@ export class Scene{
 
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x87CEEB);
-        this.scene.fog = new THREE.Fog(0xffffff, 0.1, 200);
+        this.scene.fog = new THREE.FogExp2(0xffffff, 0.005);
 
 
 

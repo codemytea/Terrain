@@ -1,9 +1,9 @@
 /*************************LEVEL 2 - FULL WORLD SPHERE***********************/
-import {WorldTerrain as WT2} from "./WorldTerrain";
-import {ArrowControls} from "../Shared/ArrowControls";
-import {Scene} from "../Shared/Scene";
-import {level2Sky, Sky} from "../Shared/Objects/Sky";
-import {WaterSphere} from "./WaterSphere";
+import {WorldTerrain as WT2} from "./WorldTerrain.js";
+import {ArrowControls} from "../Shared/ArrowControls.js";
+import {Scene} from "../Shared/Scene.js";
+import {level2Sky, Sky} from "../Shared/Objects/Sky.js";
+import {WaterSphere} from "./WaterSphere.js";
 import {Lights} from "../Shared/Objects/Lights.js";
 
 

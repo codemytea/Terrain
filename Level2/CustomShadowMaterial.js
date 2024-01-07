@@ -1,7 +1,7 @@
 //https://gist.github.com/wmcmurray/6696fc95f25bbd2401d72a74e9493261
 
 import * as THREE from "../External Libraries/three/three.module.js";
-import {mergeUniforms} from "three/src/renderers/shaders/UniformsUtils";
+import {mergeUniforms} from "../External Libraries/three/Addons/UniformsUtils.js";
 
 const vertexShader = `
     varying vec3 vPosition;

@@ -1,6 +1,5 @@
 import * as THREE from "../External Libraries/three/three.module.js";
 import {Renderer} from "./Renderer.js";
-import {FlyControls} from "../External Libraries/three/Addons/FlyControls.js";
 
 /**
  * The Scene class manages the scene.

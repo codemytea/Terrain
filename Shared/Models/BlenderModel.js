@@ -1,4 +1,4 @@
-import {GLTFLoader} from "../../External Libraries/three/Addons/GLTFLoader";
+import {GLTFLoader} from "../../External Libraries/three/Addons/GLTFLoader.js";
 
 /**
  * The BlenderModel class represents a 3D model loaded from a Blender file (.glb or .gltf).

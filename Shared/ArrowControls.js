@@ -1,7 +1,7 @@
 import * as THREE from "../External Libraries/three/three.module.js";
 
 // Constants for velocity, acceleration, and gravity
-const maxV = 6;
+const maxV = 2.5;
 const a = 11;
 const g = 10;
 
@@ -40,7 +40,7 @@ export class ArrowControls {
 
     constructor(cameraStart, world) {
         this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
-        let sphericalPosition = new THREE.Spherical(1020, -Math.PI + 0.1, 0)
+        let sphericalPosition = new THREE.Spherical(1020, -Math.PI + 0.2, 0)
         let cartesianPosition = new THREE.Vector3().setFromSphericalCoords(sphericalPosition.radius, sphericalPosition.phi, sphericalPosition.theta)
         this.camera.position.set(cartesianPosition.x, cartesianPosition.y, cartesianPosition.z)
         let rotation = this.camera.rotation

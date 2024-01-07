@@ -31,14 +31,3 @@ document.addEventListener('DOMContentLoaded', function () {
         ambientSound('./Assets/wind.wav', 0.1)
     });
 });
-
-
-/**
- * TODO:
- *
- *
- * 7) npm -> local
- *
- *
- *
- * */

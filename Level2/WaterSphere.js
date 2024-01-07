@@ -35,8 +35,8 @@ export class WaterSphere{
 
         const material = new THREE.MeshPhongMaterial({
             color: 0xbbbbff, // Deep blue color
-            //transparent: true,
-            //opacity: 0.8,
+            transparent: true,
+            opacity: 0.8,
             reflectivity: 0.5,
             refractionRatio: 0.9, // Adjust the refraction ratio
             shininess: 25, // Adjust shininess for specular highlights
@@ -57,25 +57,6 @@ export class WaterSphere{
     }
 
     onNewFrame(delta){
-
-        /**
-         *     const vertexes = world.getAttribute('position')
-         *     const vertexPositions = vertexes.array;
-         *
-         *     // Add wind effect based on elapsed time
-         *     const windDirection = new THREE.Vector3(1, 0, 0); // Adjust the wind direction
-         *     const windEffect = 100; // Adjust the strength of the wind effect
-         *
-         *     for (let i = 0; i < vertexPositions.length; i += 3) {
-         *         vertexPositions[i] += windDirection.x * windEffect * d;
-         *         vertexPositions[i + 1] += windDirection.y * windEffect * d;
-         *         vertexPositions[i + 2] += windDirection.z * windEffect * d;
-         *     }
-         *
-         *     // Update world geometry
-         *     world.verticesNeedUpdate = true;
-         *     vertexes.needsUpdate = true;
-         * */
         this.cubeCamera.update( Renderer.instance.renderer, this.scene );
     }
 

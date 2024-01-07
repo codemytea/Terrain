@@ -18,17 +18,16 @@ export const DUSTY_EVENING_SKY = {
     mieCoefficient: 0.005,
     mieDirectionalG: 0.99,
     elevation: 0,
-    azimuth: 180,
+    azimuth: 0,
 };
 
 export const NIGHT_SKY = {
-    turbidity: 0.3,
-    rayleigh: 0,
-    mieCoefficient: 0.0002,
+    turbidity: 3,
+    rayleigh: 3,
+    mieCoefficient: 0.005,
     mieDirectionalG: 0.99,
-    elevation: 25.8,
-    azimuth: 180,
-    exposure: 0.00000002
+    elevation: 5,
+    azimuth: 100,
 }
 
 

@@ -1,7 +1,7 @@
 import {Scene} from "./Shared/Scene";
 import {WorldTerrain as WT1} from "./Level1/WorldTerrain";
 import {WorldTerrain as WT2} from "./Level2/WorldTerrain";
-import {DUSTY_EVENING_SKY, MORNING_SKY, Sky} from "./Shared/Objects/Sky";
+import {DUSTY_EVENING_SKY, MORNING_SKY, NIGHT_SKY, Sky} from "./Shared/Objects/Sky";
 import {WaterSphere} from "./Level2/WaterSphere";
 import {Lights} from "./Shared/Objects/Lights";
 import {House} from "./Level1/House";
@@ -62,7 +62,7 @@ let level1 = new Scene([
     ...startingWorld.getRandomTrees(0.0009),
     ...startingWorld.getRandomRocks(0.003),
     new Grass(),
-    new Sky(DUSTY_EVENING_SKY),
+    new Sky(NIGHT_SKY),
     new Lights(),
     new House()
 
@@ -170,24 +170,15 @@ updateHUDSeeds();
  *
  * stop being able to move off scene or into model in level 1.
  *
- * sky??? either put camera on top of world or moving sky
+ * L2 - put camera on top of world
  *
- * water not reflecting!!!
  *
  * escape to go back to l1
  *
  *
- * shadows on l1
- *
- * check blender
- *
  * comment
- *
  *
  * report
  *
- * check reqs again
- *
- * deal with rocks exporting too high res
  *
  * */

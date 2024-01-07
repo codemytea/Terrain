@@ -12,24 +12,14 @@ export class Lights {
         return pl1
     }
 
-    constructor() {
+    constructor(light1, light2) {
         this.lights = [
-           // Lights.PointLight(15000, 15000, -15000),
+            Lights.PointLight(15000, 15000, -15000),
             Lights.PointLight(15000, 15000, 15000)
         ]
 
-
-        const pl2 = new THREE.DirectionalLight(0xffffff, 0)
-        pl2.position.set(0, 0, 1000)
-        pl2.castShadow = true
-        pl2.shadow.camera.near = 1;
-        pl2.shadow.camera.far = 10000;
-
         const al = new THREE.AmbientLight(0xffffff, 0)
-        //this.lights.push(al)
-
-
-        //this.lights.push(pl2)
+        this.lights.push(al)
 
     }
 

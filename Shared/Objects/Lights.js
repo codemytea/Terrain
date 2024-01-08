@@ -16,9 +16,9 @@ export class Lights {
         const pl1 = new THREE.PointLight(0xffffff, 1000000000, 100000)
         pl1.castShadow = true
         pl1.position.set(x, y, z)
-        pl1.shadow.radius = 1000;
-        pl1.shadow.mapSize.width = 20000
-        pl1.shadow.mapSize.height = 20000
+        pl1.shadow.radius = 100;
+        pl1.shadow.mapSize.width = 2048
+        pl1.shadow.mapSize.height = 2048
         return pl1
     }
 

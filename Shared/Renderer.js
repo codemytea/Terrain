@@ -13,7 +13,7 @@ export class Renderer {
      * The renderer is set to fill the entire window.
      */
     constructor() {
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({antialias:true});
 
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFShadowMap;

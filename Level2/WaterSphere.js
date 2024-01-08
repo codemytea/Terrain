@@ -52,6 +52,8 @@ export class WaterSphere {
             reflectivity: 0.5,
             refractionRatio: 0.9,
             shininess: 25,
+            //causes GL_INVALID_OPERATION: Feedback loop formed between Framebuffer and active Texture warnings on chrome -
+            // a known bug with chrome - works fine on firefox/other browsers
             envMap: cubeRenderTarget.texture,
             specular: 0xffffff,
             emissive: 0xffffff,

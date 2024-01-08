@@ -1,5 +1,5 @@
 import {BlenderModel} from "./BlenderModel.js";
-import * as THREE from "../../External Libraries/three/three.module.js";
+import * as THREE from "../../../External Libraries/three/three.module.js";
 
 /**
  *  The SphericalModel class: used for loading objects onto spherical surfaces

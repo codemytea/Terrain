@@ -1,5 +1,5 @@
-import * as THREE from "../External Libraries/three/three.module.js";
-import {PointerLockControls} from "../External Libraries/three/Addons/PointerLockControls.js";
+import * as THREE from "../../External Libraries/three/three.module.js";
+import {PointerLockControls} from "../../External Libraries/three/Addons/PointerLockControls.js";
 
 
 const g = 9.81 // ms^-2

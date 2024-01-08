@@ -1,4 +1,4 @@
-import * as THREE from "../External Libraries/three/three.module.js";
+import * as THREE from "../../External Libraries/three/three.module.js";
 
 /**
  * The Renderer class provides a singleton instance of THREE.WebGLRenderer for rendering 3D scenes.

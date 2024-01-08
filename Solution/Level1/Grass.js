@@ -1,4 +1,4 @@
-import * as THREE from "../External Libraries/three/three.module.js";
+import * as THREE from "../../External Libraries/three/three.module.js";
 import {fragShader, vertexShader} from "./GrassShaders.js";
 import {getRandomXYZAvoiding} from "../Shared/utils.js";
 

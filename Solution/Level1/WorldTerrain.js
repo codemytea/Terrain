@@ -1,4 +1,4 @@
-import * as THREE from "../External Libraries/three/three.module.js";
+import * as THREE from "../../External Libraries/three/three.module.js";
 import {getRandomXYZAvoiding} from "../Shared/utils.js";
 import {FieldTree} from "../Shared/Objects/Tree.js";
 import {FlatRock, LumpyRock, NormalRock} from "./Rock.js";

@@ -1,6 +1,6 @@
-import * as THREE from "../../External Libraries/three/three.module.js";
+import * as THREE from "../../../External Libraries/three/three.module.js";
 import {Renderer} from "../Renderer.js";
-import {Sky as ThreeSky} from "../../External Libraries/three/Addons/Sky.js";
+import {Sky as ThreeSky} from "../../../External Libraries/three/Addons/Sky.js";
 
 //Game shows 3 different types of sky
 export const menuSky = {

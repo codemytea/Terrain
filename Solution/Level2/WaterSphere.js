@@ -1,5 +1,5 @@
-import * as THREE from "../External Libraries/three/three.module.js";
-import {SimplexNoise} from "../External Libraries/three/Addons/SimplexNoise.js";
+import * as THREE from "../../External Libraries/three/three.module.js";
+import {SimplexNoise} from "../../External Libraries/three/Addons/SimplexNoise.js";
 import {getRandomInt} from "../Shared/utils.js";
 import {Renderer} from "../Shared/Renderer.js";
 

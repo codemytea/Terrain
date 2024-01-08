@@ -1,8 +1,8 @@
-import * as THREE from "../External Libraries/three/three.module.js";
-import {SimplexNoise} from "../External Libraries/three/Addons/SimplexNoise.js";
-import {noise} from "./perlin.js";
+import * as THREE from "../../External Libraries/three/three.module.js";
+import {SimplexNoise} from "../../External Libraries/three/Addons/SimplexNoise.js";
+import {noise} from "../../External Libraries/perlin.js";
 import {getRandomInt} from "../Shared/utils.js";
-import {CustomShadowMaterial} from "./CustomShadowMaterial.js";
+import {CustomShadowMaterial} from "../../External Libraries/CustomShadowMaterial.js";
 import {InstancedSphericalModel} from "../Shared/Models/InstancedSphericalModel.js";
 
 /**

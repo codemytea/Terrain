@@ -1,4 +1,4 @@
-import * as THREE from "../External Libraries/three/three.module.js";
+import * as THREE from "../../External Libraries/three/three.module.js";
 
 // Constants for velocity, acceleration, and gravity
 const maxV = 2.5;
